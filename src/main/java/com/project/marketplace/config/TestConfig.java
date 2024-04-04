@@ -15,7 +15,7 @@ import com.project.marketplace.repositories.UserRepository;
 public class TestConfig implements CommandLineRunner {
 
 	@Autowired
-	private UserRepository userrepository;
+	private UserRepository userrepository; //userRepository (sempre usar camelCase)
 
 	@Override
 	public void run(String... args) throws Exception {
