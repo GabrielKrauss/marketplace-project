@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +25,10 @@ public class Customer  implements Serializable {
 	private String name;
 	private String email;
 	private String phone;
+	private String creditScore;
 	private String password;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="client")
 	private List<Order> orders = new ArrayList<>();
 
@@ -44,14 +48,19 @@ public class Customer  implements Serializable {
 		Customer other = (Customer) obj;
 		return Objects.equals(id, other.id);
 	}
+	
+	public Customer() {
+		
+	}
 
-	public Customer(Long id, String name, String email, String phone, String password) {
+	public Customer(Long id, String name, String email, String phone, String creditScore ,String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
+		this.creditScore = creditScore;
 	}
 
 	public Long getId() {
@@ -96,6 +105,14 @@ public class Customer  implements Serializable {
 
 	public List<Order> getOrders() {
 		return orders;
+	}
+
+	public String getCreditScore() {
+		return creditScore;
+	}
+
+	public void setCreditScore(String creditScore) {
+		this.creditScore = creditScore;
 	}
 	
 	
