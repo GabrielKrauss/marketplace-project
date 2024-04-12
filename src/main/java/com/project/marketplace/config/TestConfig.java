@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.project.marketplace.entities.Customer;
 import com.project.marketplace.entities.Order;
+import com.project.marketplace.entities.Product;
 import com.project.marketplace.entities.User;
 import com.project.marketplace.entities.enums.OrderStatus;
 import com.project.marketplace.repositories.CustomerRepository;
 import com.project.marketplace.repositories.OrderRepository;
+import com.project.marketplace.repositories.ProductRepository;
 import com.project.marketplace.repositories.UserRepository;
 
 @Configuration
@@ -29,8 +31,20 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private CustomerRepository customerRepository;
 
+	@Autowired
+	private ProductRepository productRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
+		
+		Product p1 = new Product(null, "Ori and the blind forest", "Explora uma história profundamente emocional sobre amor e sacrifício, além da esperança que existe em todos nós.", 99.00, true);
+		Product p2 = new Product(null, "Hollow Knight", "Explore um vasto mundo interligado de caminhos esquecidos, florestas frondosas e cidades em ruínas.", 46.99, false);
+		Product p3 = new Product(null, "Cuphead", "A classic run and gun action game heavily focused on boss battles. Inspired by cartoons of the 1930s", 36.99, true);
+		Product p4 = new Product(null, "Hades", "Na pele do imortal Príncipe do Submundo, você usará os poderes e as armas míticas do Olimpo para se libertar das garras do deus dos mortos", 73.99, true);
+		Product p5 = new Product(null, "Resident Evil 4 (2005)", "Special agent Leon S. Kennedy is sent on a mission to rescue the U.S. President’s daughter who has been kidnapped", 39.99, true);
+		
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		
 		User u1 = new User(null, "gabrielkrauscosta@gmail.com", "luanalinda");
 		User u2 = new User(null, "luana@gmail.com", "gabriellindo");
 		
