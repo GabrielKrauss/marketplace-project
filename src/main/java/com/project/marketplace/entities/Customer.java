@@ -29,7 +29,7 @@ public class Customer  implements Serializable {
 	private String password;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="client")
+	@OneToMany(mappedBy="customer")
 	private List<Order> orders = new ArrayList<>();
 
 	@Override

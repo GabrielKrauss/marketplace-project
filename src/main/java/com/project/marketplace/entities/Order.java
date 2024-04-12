@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.marketplace.entities.enums.OrderStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,20 +25,23 @@ public class Order implements Serializable {
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant moment;
+	
+	private Integer orderStatus;
 
 	@ManyToOne
-	@JoinColumn(name = "client_id")
-	private Customer client;
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 
 	public Order() {
 
 	}
 
-	public Order(Long id, Instant moment, Customer client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, Customer client) {
 		super();
 		this.id = id;
 		this.moment = moment;
-		this.client = client;
+		setOrderStatus(orderStatus);
+		this.customer = client;
 	}
 
 	public Long getId() {
@@ -56,13 +60,24 @@ public class Order implements Serializable {
 		this.moment = moment;
 	}
 
-	public Customer getClient() {
-		return client;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setClient(Customer client) {
-		this.client = client;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
+	
+	public OrderStatus getOrderStatus() {
+		return OrderStatus.valueOf(orderStatus);
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -80,5 +95,6 @@ public class Order implements Serializable {
 		Order other = (Order) obj;
 		return Objects.equals(id, other.id);
 	}
+
 
 }
