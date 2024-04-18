@@ -8,11 +8,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.project.marketplace.entities.Category;
 import com.project.marketplace.entities.Customer;
 import com.project.marketplace.entities.Order;
 import com.project.marketplace.entities.Product;
 import com.project.marketplace.entities.User;
 import com.project.marketplace.entities.enums.OrderStatus;
+import com.project.marketplace.repositories.CategoryRepository;
 import com.project.marketplace.repositories.CustomerRepository;
 import com.project.marketplace.repositories.OrderRepository;
 import com.project.marketplace.repositories.ProductRepository;
@@ -34,8 +36,17 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private ProductRepository productRepository;
 	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
+		
+		Category cat1 = new Category(null, "Action");
+		Category cat2 = new Category(null, "Roguelike");
+		Category cat3 = new Category(null, "Multiplayer"); 
+
+		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
 		
 		Product p1 = new Product(null, "Ori and the blind forest", "Explora uma história profundamente emocional sobre amor e sacrifício, além da esperança que existe em todos nós.", 99.00, true);
 		Product p2 = new Product(null, "Hollow Knight", "Explore um vasto mundo interligado de caminhos esquecidos, florestas frondosas e cidades em ruínas.", 46.99, false);
