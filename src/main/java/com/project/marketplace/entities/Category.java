@@ -5,7 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.project.marketplace.view.View;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,11 +22,14 @@ public class Category implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView({View.Categories.class, View.Products.class})
 	private Long id;
+	
+	@JsonView({View.Categories.class, View.Products.class})
 	private String name;
-
-	@JsonIgnore
+	
 	@ManyToMany(mappedBy = "categories")
+	@JsonView({View.CategoriesById.class})
 	private Set<Product> products = new HashSet<>();
 
 	public Category() {

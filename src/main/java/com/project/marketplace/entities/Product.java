@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.project.marketplace.view.View;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,14 +24,24 @@ public class Product implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView({View.Products.class, View.CategoriesById.class})
 	private Long id;
+	
+	@JsonView({View.Products.class, View.Categories.class})
 	private String name;
+	
+	@JsonView({View.Products.class, View.CategoriesById.class})
 	private String description;
+	
+	@JsonView({View.Products.class, View.Categories.class})
 	private Double unitPrice;
+	
+	@JsonView({View.Products.class, View.Categories.class})
 	private Boolean sellIndicator;
 
 	@ManyToMany
-	@JoinTable(name = "tb_poduct_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@JsonView({View.Products.class})
 	private Set<Category> categories = new HashSet<>();
 
 	public Product() {

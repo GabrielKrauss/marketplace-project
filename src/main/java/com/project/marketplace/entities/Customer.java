@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.project.marketplace.view.View;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,14 +24,24 @@ public class Customer  implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@JsonView({View.Customers.class, View.Orders.class})
 	private String name;
+	
+	@JsonView({View.Customers.class, View.Orders.class})
 	private String email;
+	
+	@JsonView({View.Customers.class, View.Orders.class})
 	private String phone;
+	
+	@JsonView({View.Customers.class})
 	private String creditScore;
+	
+	@JsonView({View.CustomersById.class})
 	private String password;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy="customer")
+	@JsonView({View.CustomersById.class})
 	private List<Order> orders = new ArrayList<>();
 
 	@Override

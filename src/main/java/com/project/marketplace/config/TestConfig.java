@@ -54,7 +54,6 @@ public class TestConfig implements CommandLineRunner {
 		Product p4 = new Product(null, "Hades", "Na pele do imortal Príncipe do Submundo, você usará os poderes e as armas míticas do Olimpo para se libertar das garras do deus dos mortos", 73.99, true);
 		Product p5 = new Product(null, "Resident Evil 4 (2005)", "Special agent Leon S. Kennedy is sent on a mission to rescue the U.S. President’s daughter who has been kidnapped", 39.99, true);
 		
-		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
 		p1.getCategories().add(cat3);
 		p2.getCategories().add(cat1);
