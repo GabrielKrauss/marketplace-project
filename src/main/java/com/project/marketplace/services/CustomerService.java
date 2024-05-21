@@ -13,14 +13,14 @@ import com.project.marketplace.repositories.CustomerRepository;
 public class CustomerService {
 
 	@Autowired
-	private CustomerRepository	repository;
-	
-	public List<Customer> findAll(){
+	private CustomerRepository repository;
+
+	public List<Customer> findAll() {
 		return repository.findAll();
 	}
-	
+
 	public Customer findById(Long id) {
-		Optional<Customer> obj =  repository.findById(id);
+		Optional<Customer> obj = repository.findById(id);
 		return obj.get();
 	}
 }

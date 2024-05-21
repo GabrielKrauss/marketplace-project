@@ -20,18 +20,19 @@ public class OrderResource {
 
 	@Autowired
 	private OrderService service;
+
 	@GetMapping
-	@JsonView({View.Orders.class})
-	public ResponseEntity<List<Order>> findAll(){
+	@JsonView({ View.Orders.class })
+	public ResponseEntity<List<Order>> findAll() {
 		List<Order> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	@JsonView({View.OrdersById.class})
-	public ResponseEntity<Order> findById(@PathVariable Long id){
+	@JsonView({ View.OrdersById.class })
+	public ResponseEntity<Order> findById(@PathVariable Long id) {
 		Order obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 }

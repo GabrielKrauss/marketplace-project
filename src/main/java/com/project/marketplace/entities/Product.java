@@ -18,30 +18,30 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="tb_product")
-public class Product implements Serializable{
+@Table(name = "tb_product")
+public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({View.Products.class, View.CategoriesById.class})
+	@JsonView({ View.Products.class, View.CategoriesById.class, View.Orders.class })
 	private Long id;
-	
-	@JsonView({View.Products.class, View.Categories.class})
+
+	@JsonView({ View.Products.class, View.Categories.class })
 	private String name;
-	
-	@JsonView({View.Products.class, View.CategoriesById.class})
+
+	@JsonView({ View.Products.class, View.CategoriesById.class })
 	private String description;
-	
-	@JsonView({View.Products.class, View.Categories.class})
+
+	@JsonView({ View.Products.class, View.Categories.class })
 	private Double unitPrice;
-	
-	@JsonView({View.Products.class, View.Categories.class})
+
+	@JsonView({ View.Products.class, View.Categories.class })
 	private Boolean sellIndicator;
 
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	@JsonView({View.Products.class})
+	@JsonView({ View.Products.class })
 	private Set<Category> categories = new HashSet<>();
 
 	public Product() {

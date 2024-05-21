@@ -13,14 +13,14 @@ import com.project.marketplace.repositories.CategoryRepository;
 public class CategoryService {
 
 	@Autowired
-	private CategoryRepository	repository;
-	
-	public List<Category> findAll(){
+	private CategoryRepository repository;
+
+	public List<Category> findAll() {
 		return repository.findAll();
 	}
-	
+
 	public Category findById(Long id) {
-		Optional<Category> obj =  repository.findById(id);
+		Optional<Category> obj = repository.findById(id);
 		return obj.get();
 	}
 }

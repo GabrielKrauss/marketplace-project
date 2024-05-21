@@ -18,30 +18,30 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_customer")
-public class Customer  implements Serializable {
+public class Customer implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@JsonView({View.Customers.class, View.Orders.class})
+
+	@JsonView({ View.Customers.class, View.Orders.class })
 	private String name;
-	
-	@JsonView({View.Customers.class, View.Orders.class})
+
+	@JsonView({ View.Customers.class, View.Orders.class })
 	private String email;
-	
-	@JsonView({View.Customers.class, View.Orders.class})
+
+	@JsonView({ View.Customers.class, View.Orders.class })
 	private String phone;
-	
-	@JsonView({View.Customers.class})
+
+	@JsonView({ View.Customers.class })
 	private String creditScore;
-	
-	@JsonView({View.CustomersById.class})
+
+	@JsonView({ View.CustomersById.class })
 	private String password;
-	
-	@OneToMany(mappedBy="customer")
-	@JsonView({View.CustomersById.class})
+
+	@OneToMany(mappedBy = "customer")
+	@JsonView({ View.CustomersById.class })
 	private List<Order> orders = new ArrayList<>();
 
 	@Override
@@ -60,12 +60,12 @@ public class Customer  implements Serializable {
 		Customer other = (Customer) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 	public Customer() {
-		
+
 	}
 
-	public Customer(Long id, String name, String email, String phone, String creditScore ,String password) {
+	public Customer(Long id, String name, String email, String phone, String creditScore, String password) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -126,7 +126,5 @@ public class Customer  implements Serializable {
 	public void setCreditScore(String creditScore) {
 		this.creditScore = creditScore;
 	}
-	
-	
-	
+
 }

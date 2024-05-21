@@ -20,18 +20,19 @@ public class CustomerResource {
 
 	@Autowired
 	private CustomerService service;
+
 	@GetMapping
-	@JsonView({View.Customers.class})
-	public ResponseEntity<List<Customer>> findAll(){
+	@JsonView({ View.Customers.class })
+	public ResponseEntity<List<Customer>> findAll() {
 		List<Customer> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	@JsonView({View.CustomersById.class})
-	public ResponseEntity<Customer> findById(@PathVariable Long id){
+	@JsonView({ View.CustomersById.class })
+	public ResponseEntity<Customer> findById(@PathVariable Long id) {
 		Customer obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 }

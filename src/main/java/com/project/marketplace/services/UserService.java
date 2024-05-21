@@ -13,14 +13,14 @@ import com.project.marketplace.repositories.UserRepository;
 public class UserService {
 
 	@Autowired
-	private UserRepository	repository;
-	
-	public List<User> findAll(){
+	private UserRepository repository;
+
+	public List<User> findAll() {
 		return repository.findAll();
 	}
-	
+
 	public User findById(Long id) {
-		Optional<User> obj =  repository.findById(id);
+		Optional<User> obj = repository.findById(id);
 		return obj.get();
 	}
 }

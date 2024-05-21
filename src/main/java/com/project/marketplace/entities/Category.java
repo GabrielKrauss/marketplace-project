@@ -22,14 +22,14 @@ public class Category implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({View.Categories.class, View.Products.class})
+	@JsonView({ View.Categories.class, View.Products.class })
 	private Long id;
-	
-	@JsonView({View.Categories.class, View.Products.class})
+
+	@JsonView({ View.Categories.class, View.Products.class })
 	private String name;
-	
+
 	@ManyToMany(mappedBy = "categories")
-	@JsonView({View.CategoriesById.class})
+	@JsonView({ View.CategoriesById.class })
 	private Set<Product> products = new HashSet<>();
 
 	public Category() {

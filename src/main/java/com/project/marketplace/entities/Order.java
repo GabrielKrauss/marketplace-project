@@ -2,7 +2,9 @@ package com.project.marketplace.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,20 +26,24 @@ public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({View.Orders.class, View.Customers.class})
+	@JsonView({ View.Orders.class, View.Customers.class })
 	private Long id;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-	@JsonView({View.Orders.class, View.Customers.class})
+	@JsonView({ View.Orders.class, View.Customers.class })
 	private Instant moment;
-	
-	@JsonView({View.Orders.class, View.Customers.class})
+
+	@JsonView({ View.Orders.class, View.Customers.class })
 	private Integer orderStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
-	@JsonView({View.Orders.class})
+	@JsonView({ View.Orders.class })
 	private Customer customer;
+
+	@OneToMany(mappedBy = "id.order")
+	@JsonView({ View.Orders.class })
+	private Set<OrderItem> items = new HashSet<>();
 
 	public Order() {
 
@@ -73,7 +80,11 @@ public class Order implements Serializable {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	
+
+	public Set<OrderItem> getItens() {
+		return items;
+	}
+
 	public OrderStatus getOrderStatus() {
 		return OrderStatus.valueOf(orderStatus);
 	}
@@ -83,7 +94,6 @@ public class Order implements Serializable {
 			this.orderStatus = orderStatus.getCode();
 		}
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -101,6 +111,5 @@ public class Order implements Serializable {
 		Order other = (Order) obj;
 		return Objects.equals(id, other.id);
 	}
-
 
 }

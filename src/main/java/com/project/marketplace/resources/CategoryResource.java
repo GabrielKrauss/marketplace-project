@@ -20,18 +20,19 @@ public class CategoryResource {
 
 	@Autowired
 	private CategoryService service;
+
 	@GetMapping
-	@JsonView({View.Categories.class})
-	public ResponseEntity<List<Category>> findAll(){
+	@JsonView({ View.Categories.class })
+	public ResponseEntity<List<Category>> findAll() {
 		List<Category> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
-	
+
 	@GetMapping(value = "/{id}")
-	@JsonView({View.CategoriesById.class})
-	public ResponseEntity<Category> findById(@PathVariable Long id){
+	@JsonView({ View.CategoriesById.class })
+	public ResponseEntity<Category> findById(@PathVariable Long id) {
 		Category obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
-	
+
 }
