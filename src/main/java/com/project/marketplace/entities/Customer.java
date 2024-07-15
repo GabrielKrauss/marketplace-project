@@ -23,15 +23,16 @@ public class Customer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
 	private Long id;
 
-	@JsonView({ View.Customers.class, View.Orders.class })
+	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
 	private String name;
 
-	@JsonView({ View.Customers.class, View.Orders.class })
+	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
 	private String email;
 
-	@JsonView({ View.Customers.class, View.Orders.class })
+	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
 	private String phone;
 
 	@JsonView({ View.Customers.class })

@@ -17,13 +17,13 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	@JsonView({ View.Orders.class })
+//	@JsonView({ View.Orders.class, View.Products.class })
 	private OrderItemPK id = new OrderItemPK();
 
-	@JsonView({ View.Orders.class })
+	@JsonView({ View.Orders.class, View.Products.class })
 	private Integer quantity;
 
-	@JsonView({ View.Orders.class })
+	@JsonView({ View.Orders.class, View.Products.class })
 	private Double price;
 
 	public OrderItem() {
@@ -61,6 +61,7 @@ public class OrderItem implements Serializable {
 		id.setOrder(order);
 	}
 
+	@JsonView({ View.OrdersById.class })
 	public Product getProduct() {
 		return id.getProduct();
 	}

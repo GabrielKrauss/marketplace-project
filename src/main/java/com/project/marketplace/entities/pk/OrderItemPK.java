@@ -18,6 +18,7 @@ public class OrderItemPK implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "order_id")
+	@JsonView({ View.Products.class })
 	private Order order;
 
 	@ManyToOne

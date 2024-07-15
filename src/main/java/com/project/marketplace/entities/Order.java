@@ -26,19 +26,19 @@ public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({ View.Orders.class, View.Customers.class })
+	@JsonView({ View.Orders.class, View.Customers.class, View.Products.class })
 	private Long id;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
-	@JsonView({ View.Orders.class, View.Customers.class })
+	@JsonView({ View.Orders.class, View.Customers.class, View.Products.class })
 	private Instant moment;
 
-	@JsonView({ View.Orders.class, View.Customers.class })
+	@JsonView({ View.Orders.class, View.Customers.class, View.Products.class })
 	private Integer orderStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
-	@JsonView({ View.Orders.class })
+	@JsonView({ View.Orders.class, View.Products.class})
 	private Customer customer;
 
 	@OneToMany(mappedBy = "id.order")
