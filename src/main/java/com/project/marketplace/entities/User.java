@@ -2,10 +2,14 @@ package com.project.marketplace.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.project.marketplace.view.View;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,9 +18,15 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonView({ View.Users.class, View.CustomersById.class })
 	private Long id;
+	@JsonView({ View.Users.class, View.CustomersById.class })
 	private String email;
+
 	private String password;
+
+	@OneToOne(mappedBy = "user")
+	private Customer customer;
 
 	public User() {
 	}
@@ -50,6 +60,14 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 }

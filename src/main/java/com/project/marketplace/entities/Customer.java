@@ -18,7 +18,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_customer")
@@ -34,16 +36,18 @@ public class Customer implements Serializable {
 	private String name;
 
 	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
-	private String email;
-
-	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
 	private String phone;
 
 	@JsonView({ View.Customers.class })
 	private String creditScore;
 
-	@JsonView({ View.CustomersById.class })
-	private String password;
+	@OneToOne
+	@JsonView({ View.Customers.class })
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@Transient
+	private Long userId;
 
 	@OneToMany(mappedBy = "customer")
 	@JsonView({ View.CustomersById.class })
@@ -75,14 +79,21 @@ public class Customer implements Serializable {
 
 	}
 
-	public Customer(Long id, String name, String email, String phone, String creditScore, String password) {
+	public Customer(Long id, String name, String phone, String creditScore) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.email = email;
 		this.phone = phone;
-		this.password = password;
 		this.creditScore = creditScore;
+	}
+
+	public Customer(Long id, String name, String phone, String creditScore, User user) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.phone = phone;
+		this.creditScore = creditScore;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -101,28 +112,12 @@ public class Customer implements Serializable {
 		this.name = name;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getPhone() {
 		return phone;
 	}
 
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public List<Order> getOrders() {
@@ -143,6 +138,22 @@ public class Customer implements Serializable {
 
 	public void setLibrary(Set<Product> library) {
 		this.library = library;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 }

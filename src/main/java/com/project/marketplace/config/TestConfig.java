@@ -83,9 +83,10 @@ public class TestConfig implements CommandLineRunner {
 		User u1 = new User(null, "gabrielkrauscosta@gmail.com", "luanalinda");
 		User u2 = new User(null, "luana@gmail.com", "gabriellindo");
 
-		Customer c1 = new Customer(null, "Gabriel", "gabriel@gmail.com", "987654321", "2000", "luanalinda");
-		Customer c2 = new Customer(null, "Luana", "luana2@gmail.com", "12345678", "3000", "gabriellindo");
-
+		Customer c1 = new Customer(null, "Gabriel", "987654321", "2000");
+		Customer c2 = new Customer(null, "Luana", "12345678", "3000");
+		Customer c3 = new Customer(null, "Gabriel2", "9876543211", "5000", u1);
+		
 		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, c1);
 		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, c2);
 		Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.SHIPPED, c1);
@@ -103,7 +104,9 @@ public class TestConfig implements CommandLineRunner {
 		library.add(p5);
 		c1.setLibrary(library);
 		
-		customerRepository.saveAll(Arrays.asList(c1, c2));
+//		c1.setUser(u1);
+		
+		customerRepository.saveAll(Arrays.asList(c1, c2, c3));
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 	}

@@ -2,6 +2,14 @@ package com.project.marketplace.view;
 
 public class View {
 
+	public static class Users {
+
+	}
+
+	public static class UsersById extends Categories {
+
+	}
+	
 	public static class Categories {
 
 	}
