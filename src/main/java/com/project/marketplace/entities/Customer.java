@@ -2,10 +2,11 @@ package com.project.marketplace.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.marketplace.view.View;
 
@@ -13,6 +14,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -44,6 +48,11 @@ public class Customer implements Serializable {
 	@OneToMany(mappedBy = "customer")
 	@JsonView({ View.CustomersById.class })
 	private List<Order> orders = new ArrayList<>();
+
+	@ManyToMany
+	@JsonView({ View.CustomersById.class })
+	@JoinTable(name = "tb_library", joinColumns = @JoinColumn(name = "customer_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+	private Set<Product> library = new HashSet<>();
 
 	@Override
 	public int hashCode() {
@@ -126,6 +135,14 @@ public class Customer implements Serializable {
 
 	public void setCreditScore(String creditScore) {
 		this.creditScore = creditScore;
+	}
+
+	public Set<Product> getLibrary() {
+		return library;
+	}
+
+	public void setLibrary(Set<Product> library) {
+		this.library = library;
 	}
 
 }

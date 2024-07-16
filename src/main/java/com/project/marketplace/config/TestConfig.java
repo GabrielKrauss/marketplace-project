@@ -2,6 +2,8 @@ package com.project.marketplace.config;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -55,19 +57,19 @@ public class TestConfig implements CommandLineRunner {
 
 		Product p1 = new Product(null, "Ori and the blind forest",
 				"Explora uma história profundamente emocional sobre amor e sacrifício, além da esperança que existe em todos nós.",
-				99.00, true);
+				99.00, true, true);
 		Product p2 = new Product(null, "Hollow Knight",
 				"Explore um vasto mundo interligado de caminhos esquecidos, florestas frondosas e cidades em ruínas.",
-				46.99, false);
+				46.99, false, true);
 		Product p3 = new Product(null, "Cuphead",
 				"A classic run and gun action game heavily focused on boss battles. Inspired by cartoons of the 1930s",
-				36.99, true);
+				36.99, true, false);
 		Product p4 = new Product(null, "Hades",
 				"Na pele do imortal Príncipe do Submundo, você usará os poderes e as armas míticas do Olimpo para se libertar das garras do deus dos mortos",
-				73.99, true);
+				73.99, true, true);
 		Product p5 = new Product(null, "Resident Evil 4 (2005)",
 				"Special agent Leon S. Kennedy is sent on a mission to rescue the U.S. President’s daughter who has been kidnapped",
-				39.99, true);
+				39.99, true, true);
 
 		p1.getCategories().add(cat3);
 		p2.getCategories().add(cat1);
@@ -96,7 +98,13 @@ public class TestConfig implements CommandLineRunner {
 		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getUnitPrice());
 		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getUnitPrice());
 		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getUnitPrice());
-
+		
+		Set<Product> library = new HashSet<>();
+		library.add(p5);
+		c1.setLibrary(library);
+		
+		customerRepository.saveAll(Arrays.asList(c1, c2));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
 	}
 

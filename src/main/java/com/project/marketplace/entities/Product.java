@@ -25,10 +25,10 @@ public class Product implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({ View.Products.class, View.CategoriesById.class, View.OrdersById.class })
+	@JsonView({ View.Products.class, View.CategoriesById.class, View.OrdersById.class, View.CustomersById.class })
 	private Long id;
 
-	@JsonView({ View.Products.class, View.Categories.class, View.OrdersById.class })
+	@JsonView({ View.Products.class, View.Categories.class, View.OrdersById.class, View.CustomersById.class })
 	private String name;
 
 	@JsonView({ View.Products.class, View.CategoriesById.class })
@@ -40,25 +40,32 @@ public class Product implements Serializable {
 	@JsonView({ View.Products.class, View.Categories.class })
 	private Boolean sellIndicator;
 
+	@JsonView({ View.Products.class, View.Categories.class })
+	private Boolean isPhysical;
+
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	@JsonView({ View.Products.class })
 	private Set<Category> categories = new HashSet<>();
 
 	@OneToMany(mappedBy = "id.product")
-//	@JsonView({ View.Products.class })
 	private Set<OrderItem> items = new HashSet<>();
+
+	@ManyToMany(mappedBy = "library")
+	private Set<Customer> customers = new HashSet<>();
 
 	public Product() {
 	}
 
-	public Product(Long id, String name, String description, Double unitPrice, Boolean sellIndicator) {
+	public Product(Long id, String name, String description, Double unitPrice, Boolean sellIndicator,
+			Boolean isPhysical) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.unitPrice = unitPrice;
 		this.sellIndicator = sellIndicator;
+		this.isPhysical = isPhysical;
 	}
 
 	public Long getId() {
@@ -101,6 +108,14 @@ public class Product implements Serializable {
 		this.sellIndicator = sellIndicator;
 	}
 
+	public Boolean getIsPhysical() {
+		return isPhysical;
+	}
+
+	public void setIsPhysical(Boolean isPhysical) {
+		this.isPhysical = isPhysical;
+	}
+
 	public Set<Category> getCategories() {
 		return categories;
 	}
@@ -111,6 +126,18 @@ public class Product implements Serializable {
 			set.add(x.getOrder());
 		}
 		return set;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
+	}
+
+	public Set<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(Set<Customer> customers) {
+		this.customers = customers;
 	}
 
 	@Override
