@@ -17,7 +17,6 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-//	@JsonView({ View.Orders.class, View.Products.class })
 	private OrderItemPK id = new OrderItemPK();
 
 	@JsonView({ View.Orders.class, View.Products.class })
@@ -68,6 +67,11 @@ public class OrderItem implements Serializable {
 
 	public void setProduct(Product product) {
 		id.setProduct(product);
+	}
+
+	@JsonView({ View.OrdersById.class })
+	public Double getSubTotal() {
+		return price * quantity;
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class Order implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
-	@JsonView({ View.Orders.class, View.Products.class})
+	@JsonView({ View.Orders.class, View.Products.class })
 	private Customer customer;
 
 	@OneToMany(mappedBy = "id.order")
@@ -93,6 +93,15 @@ public class Order implements Serializable {
 		if (orderStatus != null) {
 			this.orderStatus = orderStatus.getCode();
 		}
+	}
+
+	@JsonView({ View.Orders.class })
+	public Double getTotal() {
+		double sum = 0.0;
+		for (OrderItem x : items) {
+			sum = sum + x.getSubTotal();
+		}
+		return sum;
 	}
 
 	@Override
