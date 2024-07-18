@@ -1,7 +1,9 @@
 package com.project.marketplace.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.marketplace.entities.pk.OrderItemPK;
@@ -10,6 +12,7 @@ import com.project.marketplace.view.View;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_order_item")
@@ -22,18 +25,17 @@ public class OrderItem implements Serializable {
 	@JsonView({ View.Orders.class, View.Products.class })
 	private Integer quantity;
 
-	@JsonView({ View.Orders.class, View.Products.class })
-	private Double price;
+	@Transient
+	private Long productId;
 
 	public OrderItem() {
 	}
 
-	public OrderItem(Order order, Product product, Integer quantity, Double price) {
+	public OrderItem(Order order, Product product, Integer quantity) {
 		super();
 		id.setOrder(order);
 		id.setProduct(product);
 		this.quantity = quantity;
-		this.price = price;
 	}
 
 	public Integer getQuantity() {
@@ -42,14 +44,6 @@ public class OrderItem implements Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
-	}
-
-	public Double getPrice() {
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
 	}
 
 	public Order getOrder() {
@@ -69,9 +63,17 @@ public class OrderItem implements Serializable {
 		id.setProduct(product);
 	}
 
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductsId(Long productId) {
+		this.productId = productId;
+	}
+
 	@JsonView({ View.OrdersById.class })
 	public Double getSubTotal() {
-		return price * quantity;
+		return id.getProduct().getUnitPrice() * quantity;
 	}
 
 	@Override

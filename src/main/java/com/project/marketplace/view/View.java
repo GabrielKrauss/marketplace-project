@@ -6,7 +6,7 @@ public class View {
 
 	}
 
-	public static class UsersById extends Categories {
+	public static class UsersById extends Users {
 
 	}
 	

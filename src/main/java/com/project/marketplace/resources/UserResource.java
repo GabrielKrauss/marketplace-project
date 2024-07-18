@@ -40,7 +40,7 @@ public class UserResource {
 	}
 
 	@PostMapping
-	@JsonView({ View.Users.class })
+	@JsonView({ View.UsersById.class })
 	public ResponseEntity<User> insert(@RequestBody User obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();

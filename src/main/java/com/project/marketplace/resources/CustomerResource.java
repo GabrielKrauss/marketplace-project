@@ -41,7 +41,7 @@ public class CustomerResource {
 	}
 
 	@PostMapping
-	@JsonView({ View.Customers.class })
+	@JsonView({ View.CustomersById.class })
 	public ResponseEntity<Customer> insert(@RequestBody Customer obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();

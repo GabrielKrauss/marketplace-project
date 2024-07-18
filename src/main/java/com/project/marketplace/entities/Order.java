@@ -2,7 +2,9 @@ package com.project.marketplace.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_order")
@@ -37,6 +40,17 @@ public class Order implements Serializable {
 	private Integer orderStatus;
 
 	@ManyToOne
+	@JoinColumn(name = "address_id")
+	@JsonView({ View.Orders.class, View.Customers.class })
+	private Address deliveryAddress;
+
+	@Transient
+	private Long addressId;
+	
+	@Transient
+	private Long customerId;
+
+	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	@JsonView({ View.Orders.class, View.Products.class })
 	private Customer customer;
@@ -46,7 +60,6 @@ public class Order implements Serializable {
 	private Set<OrderItem> items = new HashSet<>();
 
 	public Order() {
-
 	}
 
 	public Order(Long id, Instant moment, OrderStatus orderStatus, Customer client) {
@@ -81,7 +94,15 @@ public class Order implements Serializable {
 		this.customer = customer;
 	}
 
-	public Set<OrderItem> getItens() {
+	public Address getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryAddress(Address deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
+
+	public Set<OrderItem> getItems() {
 		return items;
 	}
 
@@ -93,6 +114,22 @@ public class Order implements Serializable {
 		if (orderStatus != null) {
 			this.orderStatus = orderStatus.getCode();
 		}
+	}
+
+	public Long getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(Long addressId) {
+		this.addressId = addressId;
+	}
+
+	public Long getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
 	}
 
 	@JsonView({ View.Orders.class })

@@ -17,6 +17,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_product")
@@ -53,7 +54,10 @@ public class Product implements Serializable {
 
 	@ManyToMany(mappedBy = "library")
 	private Set<Customer> customers = new HashSet<>();
-
+	
+	@Transient
+	private Set<Long> categoriesId = new HashSet<>();
+	
 	public Product() {
 	}
 
@@ -138,6 +142,14 @@ public class Product implements Serializable {
 
 	public void setCustomers(Set<Customer> customers) {
 		this.customers = customers;
+	}
+
+	public Set<Long> getCategoriesId() {
+		return categoriesId;
+	}
+
+	public void setCategoriesId(Set<Long> categoriesId) {
+		this.categoriesId = categoriesId;
 	}
 
 	@Override

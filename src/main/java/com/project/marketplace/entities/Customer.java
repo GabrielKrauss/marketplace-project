@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.project.marketplace.entities.enums.CustomerType;
 import com.project.marketplace.view.View;
 
 import jakarta.persistence.Entity;
@@ -29,20 +30,23 @@ public class Customer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
+	@JsonView({ View.Customers.class, View.OrdersById.class, View.Products.class })
 	private Long id;
 
-	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
+	@JsonView({ View.Customers.class, View.OrdersById.class, View.Products.class })
 	private String name;
 
-	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
+	@JsonView({ View.Customers.class, View.OrdersById.class, View.Products.class })
 	private String phone;
 
 	@JsonView({ View.Customers.class })
 	private String creditScore;
 
-	@OneToOne
 	@JsonView({ View.Customers.class })
+	private CustomerType customerType;
+
+	@OneToOne
+	@JsonView({ View.CustomersById.class })
 	@JoinColumn(name = "user_id")
 	private User user;
 
@@ -52,6 +56,13 @@ public class Customer implements Serializable {
 	@OneToMany(mappedBy = "customer")
 	@JsonView({ View.CustomersById.class })
 	private List<Order> orders = new ArrayList<>();
+
+	@OneToMany(mappedBy = "customer")
+	@JsonView({ View.CustomersById.class })
+	private List<Address> addresses = new ArrayList<>();
+	
+	@Transient
+	private Set<Long> addressesId = new HashSet<>();
 
 	@ManyToMany
 	@JsonView({ View.CustomersById.class })
@@ -79,20 +90,22 @@ public class Customer implements Serializable {
 
 	}
 
-	public Customer(Long id, String name, String phone, String creditScore) {
+	public Customer(Long id, String name, String phone, String creditScore, CustomerType customerType) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.phone = phone;
 		this.creditScore = creditScore;
+		setCustomerType(customerType);
 	}
 
-	public Customer(Long id, String name, String phone, String creditScore, User user) {
+	public Customer(Long id, String name, String phone, String creditScore, CustomerType customerType, User user) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.phone = phone;
 		this.creditScore = creditScore;
+		setCustomerType(customerType);
 		this.user = user;
 	}
 
@@ -122,6 +135,18 @@ public class Customer implements Serializable {
 
 	public List<Order> getOrders() {
 		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 	public String getCreditScore() {
@@ -155,5 +180,22 @@ public class Customer implements Serializable {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
+
+	public CustomerType getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(CustomerType customerType) {
+		this.customerType = customerType;
+	}
+
+	public Set<Long> getAddressesId() {
+		return addressesId;
+	}
+
+	public void setAddressesId(Set<Long> addressesId) {
+		this.addressesId = addressesId;
+	}
+	
 
 }

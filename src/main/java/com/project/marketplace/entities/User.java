@@ -1,7 +1,12 @@
 package com.project.marketplace.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.marketplace.view.View;
 
@@ -9,8 +14,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_user")
@@ -23,11 +32,20 @@ public class User implements Serializable {
 	@JsonView({ View.Users.class, View.CustomersById.class })
 	private String email;
 
+	@JsonIgnore
 	private String password;
 
 	@OneToOne(mappedBy = "user")
 	private Customer customer;
 
+	@ManyToMany
+	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JsonView({ View.UsersById.class })
+	private List<Role> roles = new ArrayList<>();
+	
+	@Transient
+	private Set<Long> rolesId = new HashSet<>();
+	
 	public User() {
 	}
 
@@ -36,6 +54,14 @@ public class User implements Serializable {
 		this.id = id;
 		this.email = email;
 		this.password = password;
+	}
+
+	public User(Long id, String email, String password, List<Role> roles) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
 	}
 
 	public Long getId() {
@@ -70,4 +96,24 @@ public class User implements Serializable {
 		this.customer = customer;
 	}
 
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public Set<Long> getRolesId() {
+		return rolesId;
+	}
+
+	public void setRolesId(Set<Long> rolesId) {
+		this.rolesId = rolesId;
+	}
+
+
+	
+	
+	
 }
