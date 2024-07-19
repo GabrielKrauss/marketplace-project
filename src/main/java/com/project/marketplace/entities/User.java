@@ -20,6 +20,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "tb_user")
@@ -32,7 +34,8 @@ public class User implements Serializable {
 	@JsonView({ View.Users.class, View.CustomersById.class })
 	private String email;
 
-	@JsonIgnore
+	@NotBlank(message = "Password is mandatory")
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$", message = "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, and must be at least 8 characters long.")
 	private String password;
 
 	@OneToOne(mappedBy = "user")
@@ -42,10 +45,10 @@ public class User implements Serializable {
 	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	@JsonView({ View.UsersById.class })
 	private List<Role> roles = new ArrayList<>();
-	
+
 	@Transient
 	private Set<Long> rolesId = new HashSet<>();
-	
+
 	public User() {
 	}
 
@@ -112,8 +115,4 @@ public class User implements Serializable {
 		this.rolesId = rolesId;
 	}
 
-
-	
-	
-	
 }

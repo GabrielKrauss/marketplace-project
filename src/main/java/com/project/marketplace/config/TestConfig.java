@@ -95,8 +95,8 @@ public class TestConfig implements CommandLineRunner {
 
 		productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 
-		User u1 = new User(null, "gabrielkrauscosta@gmail.com", "luanalinda");
-		User u2 = new User(null, "luana@gmail.com", "gabriellindo");
+		User u1 = new User(null, "gabrielkrauscosta@gmail.com", "Luanalinda2@");
+		User u2 = new User(null, "luana@gmail.com", "Gabriellindo2@");
 
 		Customer c1 = new Customer(null, "Gabriel", "987654321", "2000", CustomerType.LEGALPERSON);
 		Customer c2 = new Customer(null, "Luana", "12345678", "3000", CustomerType.NATURALPERSON);
@@ -128,7 +128,7 @@ public class TestConfig implements CommandLineRunner {
 		List<Role> roles = new ArrayList<>();
 		roles.add(r1);
 
-		User u3 = new User(null, "testeRole@gmail.com", "luanalinda", roles);
+		User u3 = new User(null, "testeRole@gmail.com", "Luanalinda2@", roles);
 
 		o3.setDeliveryAddress(ad1);
 		customerRepository.saveAll(Arrays.asList(c3));
