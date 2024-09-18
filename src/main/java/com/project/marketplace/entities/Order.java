@@ -41,7 +41,7 @@ public class Order implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "address_id")
-	@JsonView({ View.Orders.class, View.Customers.class })
+	@JsonView({ View.OrdersById.class, View.Customers.class })
 	private Address deliveryAddress;
 
 	@Transient
@@ -56,7 +56,7 @@ public class Order implements Serializable {
 	private Customer customer;
 
 	@OneToMany(mappedBy = "id.order")
-	@JsonView({ View.Orders.class })
+	@JsonView({ View.OrdersById.class })
 	private Set<OrderItem> items = new HashSet<>();
 
 	public Order() {

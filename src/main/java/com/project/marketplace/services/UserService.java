@@ -92,7 +92,7 @@ public class UserService {
 
 	private void updateData(User entity, User obj) {
 		entity.setEmail(obj.getEmail());
-		// Adicionar outros campos se precisar
+		// Adicionar senha em algum momento
 
 	}
 

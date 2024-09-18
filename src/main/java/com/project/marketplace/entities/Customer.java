@@ -30,7 +30,7 @@ public class Customer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonView({ View.Customers.class, View.OrdersById.class, View.Products.class })
+	@JsonView({ View.Customers.class, View.Orders.class, View.Products.class })
 	private Long id;
 
 	@JsonView({ View.Customers.class, View.OrdersById.class, View.Products.class })

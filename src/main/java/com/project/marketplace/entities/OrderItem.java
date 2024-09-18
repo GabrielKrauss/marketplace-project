@@ -22,7 +22,7 @@ public class OrderItem implements Serializable {
 	@EmbeddedId
 	private OrderItemPK id = new OrderItemPK();
 
-	@JsonView({ View.Orders.class, View.Products.class })
+	@JsonView({ View.OrdersById.class, View.Products.class })
 	private Integer quantity;
 
 	@Transient
