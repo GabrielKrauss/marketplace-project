@@ -47,7 +47,7 @@ public class UserResource {
 
 	@PostMapping
 	@JsonView({ View.UsersById.class })
-	public ResponseEntity<User> insert(@Valid @RequestBody User obj) {
+	public ResponseEntity<User> insert(@RequestBody User obj) {
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).body(obj);
@@ -66,10 +66,5 @@ public class UserResource {
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
-	
-	
-	@ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<String> handleEmailAlreadyExists(EmailAlreadyExistsException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
-    }
+
 }

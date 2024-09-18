@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.project.marketplace.view.View;
 
@@ -21,7 +20,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "tb_user")
@@ -35,7 +33,6 @@ public class User implements Serializable {
 	private String email;
 
 	@NotBlank(message = "Password is mandatory")
-	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$", message = "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, and must be at least 8 characters long.")
 	private String password;
 
 	@OneToOne(mappedBy = "user")

@@ -1,6 +1,7 @@
 package com.project.marketplace.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,6 +16,7 @@ import com.project.marketplace.repositories.RoleRepository;
 import com.project.marketplace.repositories.UserRepository;
 import com.project.marketplace.services.exceptions.DatabaseException;
 import com.project.marketplace.services.exceptions.EmailAlreadyExistsException;
+import com.project.marketplace.services.exceptions.InvalidPasswordException;
 import com.project.marketplace.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -38,6 +40,8 @@ public class UserService {
 		return repository.findAll();
 	}
 
+	private Set<String> messageError = new HashSet<>();
+
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
@@ -56,7 +60,12 @@ public class UserService {
 			roles.add(roleRepository.findById(x).get());
 			obj.setRoles(roles);
 		}
+		if (!validatePassword(obj.getPassword(), messageError).isEmpty()) {
+			throw new InvalidPasswordException(validatePassword(obj.getPassword(), messageError).toString());
+		}
+
 		return repository.save(obj);
+
 	}
 
 	public void delete(Long id) {
@@ -85,5 +94,27 @@ public class UserService {
 		entity.setEmail(obj.getEmail());
 		// Adicionar outros campos se precisar
 
+	}
+
+	public Set<String> validatePassword(String password, Set<String> messageError) {
+
+		messageError = new HashSet<>();
+		if (password.length() < 8) {
+			messageError.add("The password must be at least 8 characters long.");
+		}
+		if (!password.matches(".*[A-Z].*")) {
+			messageError.add("The password must contain at least one uppercase letter.");
+		}
+		if (!password.matches(".*[a-z].*")) {
+			messageError.add("The password must contain at least one lowercase letter.");
+		}
+		if (!password.matches(".*[0-9].*")) {
+			messageError.add("The password must contain at least one number.");
+		}
+		if (!password.matches(".*[@#$%^&+=].*")) {
+			messageError.add("The password must contain at least one special character (@#$%^&+=).");
+		}
+
+		return messageError;
 	}
 }

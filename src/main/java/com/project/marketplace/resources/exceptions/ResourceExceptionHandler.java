@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.project.marketplace.services.exceptions.DatabaseException;
 import com.project.marketplace.services.exceptions.EmailAlreadyExistsException;
+import com.project.marketplace.services.exceptions.InvalidPasswordException;
 import com.project.marketplace.services.exceptions.ResourceNotFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,8 +37,21 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(EmailAlreadyExistsException.class)
-    public ResponseEntity<String> handleEmailAlreadyExists(EmailAlreadyExistsException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<StandardError> handleEmailAlreadyExists(EmailAlreadyExistsException e, HttpServletRequest request) {
+		String error = "E-mail error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+    }
+	
+	@ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<StandardError> password(InvalidPasswordException e, HttpServletRequest request) {
+		String error = "Password error";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(),
+				request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
     }
 	
 	@ExceptionHandler(ConstraintViolationException.class)
