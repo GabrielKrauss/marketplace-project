@@ -11,6 +11,7 @@ import com.project.marketplace.entities.Category;
 import com.project.marketplace.entities.User;
 import com.project.marketplace.repositories.CategoryRepository;
 import com.project.marketplace.services.exceptions.DatabaseException;
+import com.project.marketplace.services.exceptions.ObjectAlreadyExistsException;
 import com.project.marketplace.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -31,6 +32,9 @@ public class CategoryService {
 	}
 
 	public Category insert(Category obj) {
+		if (repository.existsByName(obj.getName())) {
+			throw new ObjectAlreadyExistsException(obj.getName());
+		}
 		return repository.save(obj);
 	}
 
@@ -48,6 +52,9 @@ public class CategoryService {
 	public Category update(Long id, Category obj) {
 		try {
 			Category entity = repository.getReferenceById(id);
+			if (repository.existsByName(obj.getName())) {
+				throw new ObjectAlreadyExistsException(obj.getName());
+			}
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {

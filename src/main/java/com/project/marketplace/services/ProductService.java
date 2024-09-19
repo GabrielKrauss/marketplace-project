@@ -17,6 +17,7 @@ import com.project.marketplace.repositories.OrderItemRepository;
 import com.project.marketplace.repositories.OrderRepository;
 import com.project.marketplace.repositories.ProductRepository;
 import com.project.marketplace.services.exceptions.DatabaseException;
+import com.project.marketplace.services.exceptions.ObjectAlreadyExistsException;
 import com.project.marketplace.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -43,6 +44,10 @@ public class ProductService {
 	}
 	
 	public Product insert(Product obj) {
+		List<Product> productsInDatabase = repository.findByName(obj.getName());
+		if (productsInDatabase.size() == 1 && productsInDatabase.get(0).getIsPhysical() == obj.getIsPhysical()){
+				throw new ObjectAlreadyExistsException(obj.getName());
+		}
 		Set<Category> categories = new HashSet<>();
 		for (Long x : obj.getCategoriesId()) {
 			categories.add(categoryRepository.findById(x).get());
@@ -68,6 +73,12 @@ public class ProductService {
 	public Product update(Long id, Product obj) {
 		try {
 			Product entity = repository.getReferenceById(id);
+			List<Product> productsInDatabase = repository.findByName(obj.getName());
+			if (productsInDatabase.size() == 1 ){
+				if (productsInDatabase.get(0).getIsPhysical() == obj.getIsPhysical()) {
+					throw new ObjectAlreadyExistsException(obj.getName());
+				}
+			}
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {

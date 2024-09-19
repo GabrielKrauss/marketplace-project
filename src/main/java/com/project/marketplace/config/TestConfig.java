@@ -38,7 +38,7 @@ import com.project.marketplace.repositories.UserRepository;
 public class TestConfig implements CommandLineRunner {
 
 	@Autowired
-	private UserRepository userRepository; // userRepository (sempre usar camelCase)
+	private UserRepository userRepository; 
 
 	@Autowired
 	private OrderRepository orderRepository;
@@ -125,7 +125,7 @@ public class TestConfig implements CommandLineRunner {
 //		c1.setUser(u1);
 
 		Role r1 = new Role(null, Authorities.ADMIN);
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		roles.add(r1);
 
 		User u3 = new User(null, "testeRole@gmail.com", "Luanalinda2@", roles);

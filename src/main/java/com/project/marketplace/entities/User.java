@@ -41,7 +41,7 @@ public class User implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	@JsonView({ View.UsersById.class })
-	private List<Role> roles = new ArrayList<>();
+	private Set<Role> roles = new HashSet<>();
 
 	@Transient
 	private Set<Long> rolesId = new HashSet<>();
@@ -56,7 +56,7 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public User(Long id, String email, String password, List<Role> roles) {
+	public User(Long id, String email, String password, Set<Role> roles) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -96,11 +96,11 @@ public class User implements Serializable {
 		this.customer = customer;
 	}
 
-	public List<Role> getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 

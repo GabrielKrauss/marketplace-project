@@ -15,8 +15,8 @@ import com.project.marketplace.entities.User;
 import com.project.marketplace.repositories.RoleRepository;
 import com.project.marketplace.repositories.UserRepository;
 import com.project.marketplace.services.exceptions.DatabaseException;
-import com.project.marketplace.services.exceptions.EmailAlreadyExistsException;
 import com.project.marketplace.services.exceptions.InvalidPasswordException;
+import com.project.marketplace.services.exceptions.ObjectAlreadyExistsException;
 import com.project.marketplace.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -49,13 +49,13 @@ public class UserService {
 
 	public User insert(User obj) {
 		if (repository.existsByEmail(obj.getEmail())) {
-			throw new EmailAlreadyExistsException(obj.getEmail());
+			throw new ObjectAlreadyExistsException(obj.getEmail());
 		}
 		Set<ConstraintViolation<User>> violations = validator.validate(obj);
 		if (!violations.isEmpty()) {
 			throw new ConstraintViolationException(violations);
 		}
-		List<Role> roles = new ArrayList<>();
+		Set<Role> roles = new HashSet<>();
 		for (Long x : obj.getRolesId()) {
 			roles.add(roleRepository.findById(x).get());
 			obj.setRoles(roles);
@@ -82,6 +82,9 @@ public class UserService {
 	public User update(Long id, User obj) {
 		try {
 			User entity = repository.getReferenceById(id);
+			if (repository.existsByEmail(obj.getEmail())) {
+				throw new ObjectAlreadyExistsException(obj.getEmail());
+			}
 			updateData(entity, obj);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
@@ -93,7 +96,6 @@ public class UserService {
 	private void updateData(User entity, User obj) {
 		entity.setEmail(obj.getEmail());
 		// Adicionar senha em algum momento
-
 	}
 
 	public Set<String> validatePassword(String password, Set<String> messageError) {
