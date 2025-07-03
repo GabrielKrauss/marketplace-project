@@ -1,0 +1,318 @@
+<div class="container">
+  <h3 class="mb-0">Product List</h3>
+
+  <button type="button" style="float: right;" class="btn btn-warning" data-bs-toggle="modal"
+    data-bs-target="#addProduct">
+    + Add Product
+  </button>
+  <button type="button" style="float: right;" class="btn btn-warning me-2"
+    (click)="buttonFunctionChanges ? findAllActive() : findAll()">
+    {{ buttonFunctionChanges ? 'Show Active Products' : 'Show Deleted Products' }}
+  </button>
+  <form>
+    <input type="text" class="form-control me-2" placeholder="Search for product..." [(ngModel)]="searchTerm"
+      name="searchTerm" id="searchTerm" style="width: 250px; height: 40px; float: right;" (input)="onFilterChange()" />
+  </form>
+  <br><br>
+
+  <!-- Button trigger modal -->
+
+  <!-- Lista de Produtos -->
+  <table *ngIf="products.length; else noProducts" class="product-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Unit Price</th>
+        <th>Categories</th>
+        <th>Stock</th>
+        <th>Sell Indicator</th>
+        <th>Is Physical</th>
+        <th></th>
+        <th></th>
+        <th *ngIf="buttonFunctionChanges">Deleted</th>
+        <th *ngIf="buttonFunctionChanges">Reactivate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products" class="border-top border-bottom ">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.unitPrice | currency }}</td>
+        <td>
+          <span *ngFor="let category of product.categories"
+            class="badge bg-dark-subtle text-dark-emphasis rounded-pill me-2">
+            {{ category.name }}
+          </span>
+        </td>
+        <td>{{ product.stock }}</td>
+        <td style="text-align: center">
+          <input type="checkbox" [checked]="product.sellIndicator" disabled class="custom-checkbox" />
+        </td>
+        <td style="text-align: center"><input type="checkbox" [checked]="product.isPhysical" disabled
+            class="custom-checkbox" /></td>
+        <td>
+          <a class="btn text-body-secondary " data-bs-toggle="modal" (click)="edit(product)"
+            data-bs-target="#editProduct">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-pencil-square" viewBox="0 0 16 16">
+              <path
+                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z">
+              </path>
+              <path fill-rule="evenodd"
+                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z">
+              </path>
+            </svg>
+          </a>
+
+        </td>
+        <td>
+          <a (click)="delete(product.id)" class="btn text-danger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5">
+              </path>
+            </svg>
+          </a>
+        </td>
+        <td style="text-align: center" *ngIf="buttonFunctionChanges">
+          <input type="checkbox" [checked]="product.isDeleted" disabled class="custom-checkbox" />
+        </td>
+        <td *ngIf="buttonFunctionChanges && product.isDeleted">
+          <a (click)="reactivateProduct(product)" class="btn text-success center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-box-arrow-in-up" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1z" />
+              <path fill-rule="evenodd"
+                d="M7.646 4.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V14.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708z" />
+            </svg>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br>
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-end">
+      <li class="page-item " [class.disabled]="page === 0">
+        <button class="page-link text-warning" (click)="goToPage(page - 1)">Previous</button>
+      </li>
+
+      <!-- Gerar as páginas dinamicamente -->
+      <li *ngFor="let pageNumber of [].constructor(totalPages); let i = index" class="page-item"
+        [class.active]="page === i">
+        <button class="page-link text-warning" (click)="goToPage(i)">{{ i + 1 }}</button>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPages - 1">
+        <button class="page-link text-warning" (click)="goToPage(page + 1)">Next</button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Caso não existam produtos -->
+  <ng-template #noProducts>
+    <p class="mt-5">No products available.</p>
+  </ng-template>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="addProductLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addProductLabel">Add New Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="add-product">
+
+          <label for="productName">Name:</label>
+          <input required type="text" id="productName" class="form-control" placeholder="Name"
+            [(ngModel)]="newProduct.name" />
+
+          <label for="productDescription" class="mt-2">Description:</label>
+          <input type="text" id="productDescription" class="form-control" placeholder="Description"
+            [(ngModel)]="newProduct.description" />
+
+          <label for="unitPrice" class="mt-2">Unit Price:</label>
+          <input type="number" id="unitPrice" class="form-control" placeholder="Unit Price"
+            [(ngModel)]="newProduct.unitPrice" [min]="0"/>
+
+          <label for="stock" class="mt-2">Units in Stock:</label>
+          <input type="number" id="stock" class="form-control" placeholder="Stock" [(ngModel)]="newProduct.stock"
+            [disabled]="!newProduct.isPhysical" [(ngModel)]="newProduct.stock" [min]="0" (blur)="validateStock()" />
+
+          <div class="form-check mt-2">
+            <input type="checkbox" id="isPhysical" class="form-check-input" [(ngModel)]="newProduct.isPhysical"
+              (change)="onPhysicalChange()" />
+            <label for="isPhysical" class="form-check-label">Is Physical</label>
+          </div>
+
+          <div class="form-check mt-2">
+            <input type="checkbox" id="sellIndicator" class="form-check-input" [(ngModel)]="newProduct.sellIndicator"
+              [disabled]="newProduct.stock <= 0 && newProduct.isPhysical == true" />
+            <label for="sellIndicator" class="form-check-label">Sell Indicator</label>
+          </div>
+
+          <div class="form-check mt-2" *ngIf="!newProduct.isPhysical">
+            <label for="fileUrl">File URL:</label>
+            <input type="text" id="fileUrl" class="form-control" placeholder="fileUrl"
+              [(ngModel)]="newProduct.fileUrl" />
+          </div>
+
+          <label class="mt-2">Categories:</label>
+          <div class="custom-multiselect" (click)="toggleDropdown()">
+            <div class="selected-items">
+              <span *ngIf="newProduct.categories && newProduct.categories.length > 0">
+                <ng-container *ngFor="let category of newProduct.categories">
+                  {{ category.name }}<span
+                    *ngIf="category !== newProduct.categories[newProduct.categories.length - 1]">, </span>
+                </ng-container>
+              </span>
+              <span *ngIf="selectedCategories.length === 0">
+                Select Categories
+              </span>
+            </div>
+            <div *ngIf="dropdownOpen" class="dropdown-menu show">
+              <input type="text" class="form-control" placeholder="Search categories..." [(ngModel)]="searchTerm"
+                (input)="filterCategories()" (click)="$event.stopPropagation()" />
+              <div *ngFor="let cat of filteredCategories" class="form-check" (click)="$event.stopPropagation()">
+                <input type="checkbox" class="form-check-input" [id]="'cat_' + cat.id" [checked]="isSelected(cat)"
+                  (change)="toggleCategory(cat)">
+                <label class="form-check-label" [for]="'cat_' + cat.id"> {{ cat.name }}</label>
+              </div>
+              <div *ngIf="filteredCategories.length === 0" class="form-check mt-2">
+                <button type="button" class="btn btn-link"
+                  (click)="createCategory(searchTerm); $event.stopPropagation(); ">Create new category</button>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label>Image URLs: (the first image is the main image)</label>
+
+            <div *ngFor="let imageUrl of newProduct.imagesUrl; let i = index" class="d-flex mb-2">
+              <input type="text" class="form-control me-2" placeholder="Enter image URL"
+                [(ngModel)]="newProduct.imagesUrl[i]" />
+              <button class="btn btn-danger" (click)="removeImageUrl(newProduct, i)">−</button>
+            </div>
+
+            <button class="btn btn-success mt-2" (click)="addImageUrl(newProduct)">+ Add URL</button>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="insert()" data-bs-dismiss="modal"
+          [disabled]="!newProduct.name || !newProduct.unitPrice">Add Product</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="editProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="editProductLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProductLabel">Edit Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="add-product">
+
+          <label for="productName">Name:</label>
+          <input type="text" id="productName" class="form-control" placeholder="Name"
+            [(ngModel)]="selectedProduct.name" />
+
+          <label for="productDescription" class="mt-2">Description:</label>
+          <input type="text" id="productDescription" class="form-control" placeholder="Description"
+            [(ngModel)]="selectedProduct.description" />
+
+          <label for="unitPrice" class="mt-2">Unit Price:</label>
+                    <input type="number" id="unitPrice" class="form-control" placeholder="Unit Price"
+            [(ngModel)]="selectedProduct.unitPrice" [min]="0"/>
+
+          <label for="stock" class="mt-2">Units in Stock:</label>
+          <input type="number" id="stock" class="form-control" placeholder="Stock" [(ngModel)]="selectedProduct.stock"
+            [disabled]="!selectedProduct.isPhysical" [(ngModel)]="selectedProduct.stock" [min]="0" (blur)="validateStock()" />
+
+          <div class="form-check mt-2">
+            <input type="checkbox" id="isPhysical" class="form-check-input" [(ngModel)]="selectedProduct.isPhysical"
+              (change)="onPhysicalChange()" />
+            <label for="isPhysical" class="form-check-label">Is Physical</label>
+          </div>
+
+          <div class="form-check mt-2">
+            <input type="checkbox" id="sellIndicator" class="form-check-input" [(ngModel)]="selectedProduct.sellIndicator"
+              [disabled]="selectedProduct.stock <= 0 && selectedProduct.isPhysical == true" />
+            <label for="sellIndicator" class="form-check-label">Sell Indicator</label>
+          </div>
+
+          <div class="form-check mt-2" *ngIf="!selectedProduct.isPhysical">
+            <label for="fileUrl">File URL:</label>
+            <input type="text" id="fileUrl" class="form-control" placeholder="fileUrl"
+              [(ngModel)]="selectedProduct.fileUrl" />
+          </div>
+
+          <label class="mt-2">Categories:</label>
+          <div class="custom-multiselect" (click)="toggleDropdown()">
+            <div class="selected-items">
+              <span *ngIf="selectedCategories.length > 0">
+                <ng-container *ngFor="let category of selectedCategories">
+                  {{ category.name }}<span *ngIf="category !== selectedCategories[selectedCategories.length - 1]">,
+                  </span>
+                </ng-container>
+              </span>
+              <span *ngIf="selectedCategories.length === 0">
+                Select Categories
+              </span>
+            </div>
+            <div *ngIf="dropdownOpen" class="dropdown-menu show">
+              <input type="text" class="form-control" placeholder="Search categories..." [(ngModel)]="searchTerm"
+                (input)="filterCategories()" (click)="$event.stopPropagation()" />
+              <div *ngFor="let cat of filteredCategories" class="form-check" (click)="$event.stopPropagation()">
+                <input type="checkbox" class="form-check-input" [id]="'cat_' + cat.id" [checked]="isSelected(cat)"
+                  (change)="toggleCategory(cat)">
+                <label class="form-check-label" [for]="'cat_' + cat.id">{{ cat.name }}</label>
+              </div>
+              <div *ngIf="filteredCategories.length === 0" class="form-check mt-2">
+                <button type="button" class="btn btn-link"
+                  (click)="createCategory(searchTerm); $event.stopPropagation(); ">+ Create new category</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Image URLs: (the first image is the main image)</label>
+
+            <div *ngFor="let imageUrl of selectedProduct.imagesUrl; let i = index" class="d-flex mb-2">
+              <input type="text" class="form-control me-2" placeholder="Enter image URL"
+                [(ngModel)]="selectedProduct.imagesUrl[i]" />
+              <button class="btn btn-danger" (click)="removeImageUrl(selectedProduct, i)">−</button>
+            </div>
+
+            <button class="btn btn-success mt-2" (click)="addImageUrl(selectedProduct)">+ Add URL</button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+              (click)="closeModal()">Cancel</button>
+            <button type="button" class="btn btn-warning" (click)="updateProduct()"
+              data-bs-dismiss="modal">Edit</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

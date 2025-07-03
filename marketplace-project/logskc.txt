@@ -1,0 +1,25 @@
+Updating the configuration and installing your custom providers, if any. Please wait.
+2025-03-09 20:30:52,541 WARN  [io.qua.config] (build-38) Unrecognized configuration key "quarkus.smallrye-health.extensions.enabled" was provided; it will be ignored; verify that the dependency extension for this configuration is set or that you did not make a typo
+2025-03-09 20:31:11,082 INFO  [io.qua.hib.orm.dep.HibernateOrmProcessor] (build-32) A legacy persistence.xml file is present in the classpath. This file will be used to configure JPA/Hibernate ORM persistence units, and any configuration of the Hibernate ORM extension will be ignored. To ignore persistence.xml files instead, set the configuration property 'quarkus.hibernate-orm.persistence-xml.ignore' to 'true'.
+2025-03-09 20:31:41,720 INFO  [io.qua.dep.QuarkusAugmentor] (main) Quarkus augmentation completed in 69779ms
+Running the server in development mode. DO NOT use this configuration in production.
+2025-03-09 20:31:43,462 WARN  [io.quarkus.config] (main) Unrecognized configuration key "quarkus.smallrye-health.extensions.enabled" was provided; it will be ignored; verify that the dependency extension for this configuration is set or that you did not make a typo
+2025-03-09 20:31:48,476 INFO  [org.keycloak.quarkus.runtime.storage.infinispan.CacheManagerFactory] (ForkJoinPool.commonPool-worker-1) Starting Infinispan embedded cache manager
+2025-03-09 20:31:48,742 INFO  [org.infinispan.CONTAINER] (ForkJoinPool.commonPool-worker-1) Virtual threads support enabled
+2025-03-09 20:31:49,160 INFO  [org.infinispan.CONTAINER] (ForkJoinPool.commonPool-worker-1) ISPN000556: Starting user marshaller 'org.infinispan.commons.marshall.ImmutableProtoStreamMarshaller'
+2025-03-09 20:31:50,145 INFO  [org.infinispan.transaction.lookup.JBossStandaloneJTAManagerLookup] (ForkJoinPool.commonPool-worker-1) ISPN000107: Retrieving transaction manager Transaction: unknown
+2025-03-09 20:31:50,740 INFO  [org.keycloak.broker.provider.AbstractIdentityProviderMapper] (main) Registering class org.keycloak.broker.provider.mappersync.ConfigSyncEventListener
+2025-03-09 20:31:50,762 INFO  [org.keycloak.connections.infinispan.DefaultInfinispanConnectionProviderFactory] (main) Node name: node_133346, Site name: null
+2025-03-09 20:31:52,750 WARN  [io.agroal.pool] (main) Datasource '<default>': JDBC resources leaked: 3 ResultSet(s) and 0 Statement(s)
+2025-03-09 20:31:52,935 INFO  [io.quarkus] (main) Keycloak 26.1.0 on JVM (powered by Quarkus 3.15.2) started in 11.047s. Listening on: http://0.0.0.0:8081
+2025-03-09 20:31:52,937 INFO  [io.quarkus] (main) Profile dev activated. 
+2025-03-09 20:31:52,937 INFO  [io.quarkus] (main) Installed features: [agroal, cdi, hibernate-orm, jdbc-postgresql, keycloak, narayana-jta, opentelemetry, reactive-routes, rest, rest-jackson, smallrye-context-propagation, vertx]
+2025-03-09 20:35:42,461 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-11) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 20:39:06,486 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-16) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 20:46:08,764 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-26) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 20:59:55,618 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-29) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 21:07:50,597 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-37) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 21:45:05,060 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-42) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 22:22:20,479 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-49) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app
+2025-03-09 22:22:31,031 WARN  [org.keycloak.events] (executor-thread-49) type="REFRESH_TOKEN_ERROR", realmId="c395e288-e115-4b22-9a78-edc6f37eab1c", realmName="GamerHeaven", clientId="GamerHeaven-app", userId="null", sessionId="b0bf262c-c9e8-4ba4-857e-e126e122833b", ipAddress="127.0.0.1", error="invalid_token", reason="Session not active", grant_type="refresh_token", refresh_token_type="Refresh", refresh_token_id="c928055f-a7ae-45f2-b8d4-3787e688e4c4", refresh_token_sub="2484145d-7838-4d38-b5fe-aa6a16a83b18", client_auth_method="client-secret"
+2025-03-09 22:40:02,816 WARN  [org.keycloak.services.managers.AuthenticationManager] (executor-thread-67) Some clients have not been logged out for user admin in GamerHeaven realm: GamerHeaven-app

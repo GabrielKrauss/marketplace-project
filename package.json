@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@eds/vanilla": "^3.24.1"
+  }
+}

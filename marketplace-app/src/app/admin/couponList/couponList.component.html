@@ -1,0 +1,156 @@
+<div class="container">
+  <h3>Coupon List</h3>
+
+  <button type="button" style="float: right;" class="btn btn-warning" data-bs-toggle="modal"
+    data-bs-target="#addCoupon">
+    + Add Coupon
+  </button>
+  <button type="button" style="float: right;" class="btn btn-warning me-2"
+    (click)="buttonFunctionChanges ? findAllActive() : findAll()">
+    {{ buttonFunctionChanges ? 'Show Active Coupons' : 'Show Deleted Coupons' }}
+  </button>
+  <form>
+    <input type="text" class="form-control me-2" placeholder="Search for coupon..."
+      style="width: 250px; height: 40px; float: right;" [(ngModel)]="searchTerm" name="searchCoupon"
+      id="searchCoupon" (input)="filterCoupons()" />
+  </form>
+  <br><br>
+
+  <table *ngIf="filteredCouponList.length; else noCoupons" class="product-table">
+    <thead class="text-center">
+      <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Discount Value</th>
+        <th>Discount Percentage</th>
+        <th>Active</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let coupon of filteredCouponList" class="border-top border-bottom">
+        <td>{{ coupon.id }}</td>
+        <td>{{ coupon.code }}</td>
+        <td>{{ coupon.discountValue | currency }}</td>
+        <td>{{ coupon.discountPercentage }}%</td>
+        <td class="text-center">
+          <input type="checkbox" [checked]="coupon.isActive" disabled class="custom-checkbox" />
+        </td>
+        <td class="text-center">
+          <a class="btn text-body-secondary" data-bs-toggle="modal" (click)="edit(coupon)" data-bs-target="#editCoupon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-pencil-square" viewBox="0 0 16 16">
+              <path
+                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z">
+              </path>
+              <path fill-rule="evenodd"
+                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z">
+              </path>
+            </svg>
+          </a>
+        </td>
+        <td class="text-center">
+          <a (click)="delete(coupon.id)" class="btn text-danger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5">
+              </path>
+            </svg>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noCoupons>
+    <p>No coupons available.</p>
+  </ng-template>
+
+
+  <!-- Modal para adicionar Coupon -->
+  <div class="modal fade" id="addCoupon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="addCouponLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCouponLabel">Add New Coupon</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <label for="code" class="mt-2">Code:</label>
+          <input type="text" id="code" class="form-control" placeholder="Coupon Code" [(ngModel)]="newCoupon.code"
+            required #codeInput="ngModel" />
+
+          <div *ngIf="codeInput.invalid && codeInput.touched" class="text-danger">
+            Code is required!
+          </div>
+
+          <label for="discountValue" class="mt-2">Discount Value:</label>
+          <input type="number" id="discountValue" class="form-control" placeholder="Discount Value"
+            [(ngModel)]="newCoupon.discountValue" [disabled]="!!newCoupon.discountPercentage" />
+
+          <label for="discountPercentage" class="mt-2">Discount Percentage:</label>
+          <input type="number" id="discountPercentage" class="form-control" placeholder="Discount Percentage"
+            [(ngModel)]="newCoupon.discountPercentage" [disabled]="!!newCoupon.discountValue" />
+
+          <div class="form-check mt-2">
+            <input type="checkbox" id="isActive" class="form-check-input" [(ngModel)]="newCoupon.isActive" />
+            <label for="isActive" class="form-check-label">Active</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-warning" (click)="insert()" data-bs-dismiss="modal"
+            [disabled]="codeInput.invalid || (!newCoupon.discountValue && !newCoupon.discountPercentage)">Add
+            Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para editar Coupon -->
+  <div class="modal fade" id="editCoupon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="editCouponLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCouponLabel">Edit Coupon</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <label for="code" class="mt-2">Code:</label>
+          <input type="text" id="code" class="form-control" placeholder="Coupon Code" [(ngModel)]="selectedCoupon.code"
+            required #codeEdit="ngModel" />
+
+          <div *ngIf="codeEdit.invalid && codeEdit.touched" class="text-danger">
+            Code is required!
+          </div>
+
+          <label for="discountValue" class="mt-2">Discount Value:</label>
+          <input type="number" id="discountValue" class="form-control" placeholder="Discount Value"
+            [(ngModel)]="selectedCoupon.discountValue" [disabled]="!!selectedCoupon.discountPercentage" />
+
+          <label for="discountPercentage" class="mt-2">Discount Percentage:</label>
+          <input type="number" id="discountPercentage" class="form-control" placeholder="Discount Percentage"
+            [(ngModel)]="selectedCoupon.discountPercentage" [disabled]="!!selectedCoupon.discountValue" max="100" />
+          <div *ngIf="selectedCoupon.discountPercentage > 100" class="alert alert-danger w-100">
+            Value cannot be greater than 100!
+          </div>
+
+          <div class="form-check mt-2">
+            <input type="checkbox" id="isActive" class="form-check-input" [(ngModel)]="selectedCoupon.isActive" />
+            <label for="isActive" class="form-check-label">Active</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-warning" (click)="updateCoupon()" data-bs-dismiss="modal"
+            [disabled]="codeEdit.invalid || (!selectedCoupon.discountValue && !selectedCoupon.discountPercentage) || (selectedCoupon.discountPercentage > 100)">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>

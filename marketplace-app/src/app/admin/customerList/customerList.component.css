@@ -1,0 +1,98 @@
+body,
+html {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+}
+
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+}
+.form-row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.custom-checkbox-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid black;
+  border-radius: 4px;
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #ffc107;
+  border: 2px solid #343a40;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  background-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22currentColor%22%20class%3D%22bi%20bi-check-lg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M12.736%203.97a.733.733%200%200%201%201.047%200c.286.289.29.756.01%201.05L7.88%2012.01a.733.733%200%200%201-1.065.02L3.217%208.384a.757.757%200%200%201%200-1.06.733.733%200%200%201%201.047%200l3.052%203.093%205.4-6.425z%22%2F%3E%3C%2Fsvg%3E');
+  width: 14px;
+  height: 14px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+
+}
+
+.custom-multiselect {
+  position: relative;
+  border: 1px solid #343a40;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  background: #343a40;
+}
+
+.selected-items {
+  min-height: 30px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #343a40;
+  background: #343a40;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.custom-multiselect .dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.custom-multiselect input[type="text"] {
+  margin-bottom: 10px;
+}

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081  # Altere para a porta 8081
+          env:
+            - name: KC_DB
+              value: postgres
+            - name: KC_DB_URL
+              value: jdbc:postgresql://postgresql:5432/mydb
+            - name: KC_DB_USERNAME
+              value: "admin"    # Substitua pelo usuário do seu banco, se diferente
+            - name: KC_DB_PASSWORD
+              value: "admin"    # Substitua pela senha do seu banco, se diferente
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              value: "admin"
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              value: "admin"
+            - name: KC_HTTP_PORT
+              value: "8081"  # Alterar a porta para 8081
+          volumeMounts:
+            - name: keycloak-data
+              mountPath: /opt/keycloak/data
+          command:
+            - "/opt/keycloak/bin/kc.sh"
+          args:
+            - "start-dev"
+      volumes:
+        - name: keycloak-data
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - protocol: TCP
+      port: 8081  # Alterar para a porta 8081
+      targetPort: 8081  # Alterar para a porta 8081
+  type: NodePort

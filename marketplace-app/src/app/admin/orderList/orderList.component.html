@@ -1,0 +1,140 @@
+<div class="container">
+  <h3>Order List
+    <button type="button" style="float: right;" class="btn btn-warning"
+      (click)="buttonFunctionChanges ? findAllActive() : findAll()">
+      {{ buttonFunctionChanges ? 'Show Active Orders' : 'Show Deleted Orders' }}
+    </button>
+  </h3>
+  <br><br>
+
+
+  <!-- Lista de Produtos -->
+  <table *ngIf="orders.length; else noProducts" class="order-table">
+    <thead class="text-center">
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Moment</th>
+        <th>Order Status</th>
+        <th>Total Price</th>
+        <th>Coupon</th>
+        <th>Products</th>
+        <th>Address</th>
+
+        <th></th>
+        <th></th>
+        <th *ngIf="buttonFunctionChanges">Deleted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders" class="border-top border-bottom ">
+        <td>{{ order.id }}</td>
+        <td>{{ getCustomerById(order.customer.id)?.name }}</td>
+        <td>{{ order.moment | date }} </td>
+        <td class="text-center"><span class="badge bg-dark-subtle text-dark-emphasis rounded-pill me-2">{{
+            order.orderStatus }}</span></td>
+        <td>{{ order.total | currency }}</td>
+        <td>{{ order.coupon ? order.coupon.code : 'No coupon' }}</td>
+        <td class="text-center">
+          <a *ngFor="let items of order.items" class="badge bg-dark-subtle text-dark-emphasis rounded-pill me-2" [routerLink]="['/product', items.productId]"
+          target="_blank">
+            ID: {{ items.productId }} - {{ items.quantity}}u
+        </a>
+        </td>
+
+        <td class="text-center">
+          <span class="badge bg-dark-subtle text-dark-emphasis rounded-pill me-2">
+            {{ order.deliveryAddress.id }}
+          </span>
+          <!-- Botão que abre o modal -->
+          <a class="btn text-info btn-sm" data-bs-toggle="modal" data-bs-target="#addressInfo"
+            (click)="openAddressModal(order)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+              fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+            </svg></a>
+        </td>
+
+        <td class="text-center">
+          <a class="btn text-body-secondary " data-bs-toggle="modal" (click)="edit(order)" data-bs-target="#editOrder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+              class="bi bi-pencil-square" viewBox="0 0 16 16">
+              <path
+                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z">
+              </path>
+              <path fill-rule="evenodd"
+                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z">
+              </path>
+            </svg>
+          </a>
+
+        </td>
+        <td class="text-center">
+          <a (click)="delete(order.id)" class="btn text-danger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5">
+              </path>
+            </svg>
+          </a>
+        </td>
+        <td style="text-align: center" *ngIf="buttonFunctionChanges">
+          <input type="checkbox" [checked]="order.isDeleted" disabled class="custom-checkbox" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Caso não existam produtos -->
+  <ng-template #noProducts>
+    <p>No orders available.</p>
+  </ng-template>
+</div>
+
+<div class="modal fade " id="editOrder" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="editOrderLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editOrderLabel">Edit Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="add-product">
+          <label for="orderStatus" class="form-label">Order Status:</label>
+          <select id="orderStatus" class="form-select" [(ngModel)]="selectedOrder.orderStatus">
+            <option *ngFor="let status of orderStatusList" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+          <button type="button" class="btn btn-warning " (click)="updateOrder()" data-bs-dismiss="modal">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addressInfo" tabindex="-1" aria-labelledby="addressInfo" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delivery Address Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Street:</strong> {{ selectedAddress.street }}</p>
+        <p><strong>House Number: </strong> {{ selectedAddress.houseNumber }}</p>
+        <p><strong>Neighborhood:</strong> {{ selectedAddress.neighborhood }}</p>
+        <p><strong>City:</strong> {{ selectedAddress.city }}</p>
+        <p><strong>Country:</strong> {{ selectedAddress.country }}</p>
+        <p><strong>Zip Code:</strong> {{ selectedAddress.zipCode }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

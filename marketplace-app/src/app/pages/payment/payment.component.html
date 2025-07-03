@@ -1,0 +1,159 @@
+
+
+<section class="h-100 h-custom">
+  <div class="container py-4 h-100">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+        <li class="breadcrumb-item active" id="yourCart">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" id="yourCart" routerLink="/cart">
+            Your Cart
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis fw-semibold text-decoration-none " routerLink="/deliveryAddress">Delivery
+            Address</a>
+        </li>
+        <li class="breadcrumb-item active text-black bg-warning fw-semibold" aria-current="page">
+          Payment
+        </li>
+      </ol>
+    </nav>
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-4">
+
+                  <h3>Choose A Payment Method</h3>
+
+                  <div class="form-group">
+                    <label for="paymentType">Select Payment Method:</label>
+                    <select class="form-control" id="paymentType" [(ngModel)]="paymentType"
+                      (change)="onPaymentTypeChange()">
+                      <option value="" disabled selected>Select an option</option>
+                      <option value="boleto">Boleto</option>
+                      <option value="credit">Credit Card</option>
+                      <option value="debit">Debit Card</option>
+                      <option value="pix">PIX</option>
+                    </select>
+                  </div>
+
+                  <!-- Boleto Form -->
+                  <div *ngIf="paymentType === 'boleto'">
+                    <p class="mt-3">Boleto will be generated after completing the purchase.</p>
+                  </div>
+
+                  <!-- Credit Card Form -->
+                  <div *ngIf="paymentType === 'credit' || paymentType === 'debit'">
+                    <div class="form-group">
+                      <label for="cardNumber">Card Number:</label>
+                      <input type="text" id="cardNumber" class="form-control" [(ngModel)]="cardNumber"
+                        placeholder="Enter card number">
+                    </div>
+                    <div class="form-group">
+                      <label for="expiryDate">Expiry Date:</label>
+                      <input type="text" id="expiryDate" class="form-control" [(ngModel)]="expiryDate"
+                        placeholder="MM/YY">
+                    </div>
+                    <div class="form-group">
+                      <label for="cvv">CVV:</label>
+                      <input type="text" id="cvv" class="form-control" [(ngModel)]="cvv" placeholder="Enter CVV">
+                    </div>
+                  </div>
+
+                  <!-- PIX Form -->
+                  <div *ngIf="paymentType === 'pix'">
+                    <p class="mt-3">PIX will be generated after completing the purchase.</p>
+                  </div>
+
+                  <div>
+                    <h6 class="mb-4 py-5"><a routerLink="/home" class="text-body"><i
+                          class="fas fa-long-arrow-alt-left me-2"></i>Back
+                        to shop</a></h6>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-4 bg-body-tertiary">
+                <div class="p-5">
+                  <h3 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-warning">Your cart</span>
+                    <span class="badge bg-warning text-black rounded-pill">{{ cartProducts.length }}</span>
+                  </h3>
+                  <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-sm"
+                      *ngFor="let orderItem of cartProducts">
+                      <div>
+                        <h6 class="my-0">{{ getProductById(orderItem.productId)?.name || 'Unknown Product' }}</h6>
+                        <small class="text-body-secondary"
+                          *ngIf="getProductById(orderItem.productId)?.isPhysical === false">Digital</small>
+                        <small class="text-body-secondary"
+                          *ngIf="getProductById(orderItem.productId)?.isPhysical === true">Physical</small>
+                      </div>
+                      <span class="text-body-secondary">
+                        {{ (getProductById(orderItem.productId)?.unitPrice || 0) * orderItem.quantity | currency }}
+                      </span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between bg-body-tertiary" *ngIf="appliedCoupon">
+                      <div class="text-success">
+                        <h6 class="my-0">Promo Code</h6>
+                        <small>{{ appliedCoupon.code }}</small>
+                      </div>
+                      <span class="text-success" *ngIf="appliedCoupon.discountPercentage">
+                        -{{ appliedCoupon.discountPercentage }}%
+                      </span>
+                      <span class="text-success">-{{ discountValue | currency }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Total (USD)</span>
+                      <strong>{{ totalPrice | currency }}</strong>
+                    </li>
+                  </ul>
+                  <br>
+                  <div class="popover-container w-100">
+                    <!-- Botão -->
+                    <button class="w-100 btn btn-warning btn-lg" type="button" (click)="insertOrder()"
+                      [disabled]="deliveryAddressId === 0 || cartProducts.length === 0 || !areAllItemsValid()">
+                      Continue to checkout
+                    </button>
+
+                    <!-- Popovers -->
+                    <ng-container *ngIf="deliveryAddressId === 0; else checkCart">
+                      <div class="popover-content">
+                        Choose your Delivery Address first!
+                      </div>
+                    </ng-container>
+
+                    <ng-template #checkCart>
+                      <ng-container *ngIf="cartProducts.length === 0; else checkItems">
+                        <div class="popover-content">
+                          Your Cart is empty! Choose some of our products and come back!
+                        </div>
+                      </ng-container>
+                    </ng-template>
+
+                    <ng-template #checkItems>
+                      <ng-container *ngIf="!areAllItemsValid();">
+                        <div class="popover-content">
+                          Check your Cart! You have a product that is no longer available!
+                        </div>
+                      </ng-container>
+                    </ng-template>
+
+
+                  </div>
+                  <div *ngIf="showSuccessAlert" class="alert alert-success" role="alert">
+                    Order placed successfully!
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

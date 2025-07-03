@@ -1,0 +1,28 @@
+body, html {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #343a40; /* Cor de fundo */
+  }
+  
+  .form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Garante que ocupa a largura da tela */
+  }
+  
+  .form-container {
+    background: #212529;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%; /* Responsivo */
+  }
+  .form-row {
+    margin-left: 0 !important; /* Remove margin lateral */
+    margin-right: 0 !important;
+  }

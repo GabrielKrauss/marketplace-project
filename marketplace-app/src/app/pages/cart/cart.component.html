@@ -1,0 +1,231 @@
+<section class="h-100 h-custom">
+  <div class="container py-4 h-100">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+        <li class="breadcrumb-item active bg-warning">
+          <a class="link-body-emphasis fw-semibold text-decoration-none text-black" id="yourCart" routerLink="/cart">
+            Your Cart
+          </a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" routerLink="/deliveryAddress"
+            [class.disabled]="isProductInLibrary || cartProducts.length === 0 || checkCustomerLogged()"
+            (click)="isProductInLibrary ? $event.preventDefault() : null">
+            Delivery Address
+          </a>
+
+        <li class="breadcrumb-item active link-body-emphasis fw-semibold "
+          [class.disabled]="isProductInLibrary || cartProducts.length === 0" aria-current="page">
+          Payment
+        </li>
+      </ol>
+    </nav>
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-4">
+                  <h3>Confirm Your Cart</h3>
+                  <div class="row mb-3 d-flex justify-content-between align-items-center"
+                    *ngIf="cartProducts.length > 0; else emptyCart">
+                    <hr class="my-4">
+                    <div class="row mb-2 d-flex justify-content-between align-items-center"
+                      *ngFor="let item of cartProducts">
+                      <div class="col-md-2 col-lg-2 col-xl-2">
+                        <img [src]="getProductById(item.productId)?.imagesUrl" class="img-fluid rounded-3" style="max-width: 80px; max-height: 80px;">
+                      </div>
+                      <div class="col-md-3 col-lg-3 col-xl-3">
+                        <h6 class="mb-0">{{ getProductById(item.productId)?.name }}</h6>
+                        <small class="text-body-secondary"
+                          *ngIf="!getProductById(item.productId)?.isPhysical">Digital</small>
+                        <small class="text-body-secondary"
+                          *ngIf="getProductById(item.productId)?.isPhysical">Physical</small>
+                      </div>
+                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                        <input id="form1" min="0" name="quantity" [value]="item.quantity" type="number"
+                          (input)="updateQuantity($event, item.productId)"
+                          class="form-control form-control-sm styled-input"
+                          [disabled]="!getProductById(item.productId)?.isPhysical" />
+                      </div>
+                      <div class="col-md-3 col-lg-3 col-xl-1 d-flex text-danger"
+                        *ngIf="checkIfProductInLibrary(item.productId)">
+                        <div class="popover-container">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path
+                              d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2">
+                            </path>
+                          </svg>
+                          <div class="popover-content">
+                            This product is already in your library! <br>
+                            Remove it from the cart to continue shopping.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-lg-3 col-xl-1 d-flex text-warning"
+                        *ngIf="!getProductById(item.productId)?.sellIndicator || getProductById(item.productId)?.isDeleted">
+                        <div class="popover-container">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path
+                              d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2">
+                            </path>
+                          </svg>
+                          <div class="popover-content">
+                            This product is no longer available! <br>
+                            Remove it from the cart to continue shopping.
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                        <h6 class="mb-0"> {{ getProductById(item.productId)?.unitPrice | currency }}</h6>
+                      </div>
+                      <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                        <a (click)="removeFromCart(item.productId)" type="button" class="btn text-danger">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                            class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path
+                              d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5">
+                            </path>
+                          </svg>
+                        </a>
+                      </div>
+                      <hr class="my-3">
+                    </div>
+                  </div>
+
+                  <div>
+                    <h6 class="mb-0"><a routerLink="/home" class="text-body"><i
+                          class="fas fa-long-arrow-alt-left me-2"></i>Back
+                        to shop</a></h6>
+                  </div>
+                  <ng-template #emptyCart>
+                    <div class="text-center my-5">
+                      <h2>Your cart is empty!</h2>
+                      <p>Start adding products to your cart.</p>
+                      <a routerLink="/home" class="btn btn-primary">Go to Products</a>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-lg-4 bg-body-tertiary">
+                <div class="p-5">
+                  <h3 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-warning">Your cart</span>
+                    <span class="badge bg-warning text-black rounded-pill">{{ cartProducts.length }}</span>
+                  </h3>
+                  <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-sm" *ngFor="let item of cartProducts">
+                      <div>
+                        <h6 class="my-0">{{ getProductById(item.productId)?.name }}</h6>
+                        <small class="text-body-secondary"
+                          *ngIf="!getProductById(item.productId)?.isPhysical">Digital</small>
+                        <small class="text-body-secondary"
+                          *ngIf="getProductById(item.productId)?.isPhysical">Physical</small>
+                      </div>
+                      <span class="text-body-secondary" *ngIf="getProductById(item.productId) as product">
+                        {{ product.unitPrice * item.quantity | currency }}
+                      </span>
+                      <span *ngIf="!getProductById(item.productId)">Product not found {{ item.productId }}</span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between bg-body-tertiary" *ngIf="appliedCoupon">
+                      <div class="text-success">
+                        <h6 class="my-0">Promo Code</h6>
+                        <small>{{ appliedCoupon.code }} </small>
+                      </div>
+
+                      <span class="text-success" *ngIf="appliedCoupon.discountPercentage">-{{
+                        appliedCoupon.discountPercentage }}%</span>
+
+                      <span class="text-success" *ngIf="appliedCoupon.discountPercentage">-{{ discountValue | currency}}
+                      </span>
+                      <span class="text-success" *ngIf="appliedCoupon.discountValue">-{{ appliedCoupon.discountValue |
+                        currency }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Total (USD)</span>
+                      <strong>{{ totalPrice | currency}}</strong>
+                    </li>
+                  </ul>
+                  <form class="card p-2">
+                    <div class="alert alert-danger" role="alert" *ngIf="couponError">
+                      {{ couponError }}
+                    </div>
+                    <div class="input-group">
+                      <input type="text" name="couponCode" class="form-control" placeholder="Promo code"
+                        [(ngModel)]="couponCode">
+                      <button type="submit" class="btn btn-secondary" (click)="applyCoupon()">Redeem</button>
+                    </div>
+                  </form>
+                  <br>
+                  <div class="popover-container w-100">
+                    <!-- Botão com a condição de desabilitado -->
+                    <button class="w-100 btn btn-warning btn-lg" type="button"
+                      [disabled]="isProductInLibrary || cartProducts.length === 0 || !areAllItemsValid()"
+                      data-bs-toggle="modal" data-bs-target="#loginModal" *ngIf="!checkCustomerLogged()">
+                      Continue to checkout
+                    </button>
+
+                    <button class="w-100 btn btn-warning btn-lg" [routerLink]="'/deliveryAddress'"
+                      *ngIf="checkCustomerLogged()">
+                      Continue to checkout
+                    </button>
+                    <!-- Popovers -->
+                    <ng-container *ngIf="!areAllItemsValid(); else checkCart">
+                      <div class="popover-content">
+                        Check your Cart! You have a product that is no longer available!
+                      </div>
+                    </ng-container>
+
+                    <ng-template #checkCart>
+                      <ng-container *ngIf="cartProducts.length === 0; else checkLibrary">
+                        <div class="popover-content">
+                          Your Cart is empty! Choose some of our products and come back!
+                        </div>
+                      </ng-container>
+                    </ng-template>
+
+                    <ng-template #checkLibrary>
+                      <ng-container *ngIf="isProductInLibrary">
+                        <div class="popover-content">
+                          This action is unavailable because a product is already in your library!
+                        </div>
+                      </ng-container>
+                    </ng-template>
+
+                  </div>
+
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>You need to log in or sign up to proceed to checkout.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a [routerLink]="['/login']" class="btn btn-primary">Login / Sign Up</a>
+      </div>
+    </div>
+  </div>
+</div>

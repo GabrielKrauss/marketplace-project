@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<header class="p-3 text-bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+                style="float: left; width: 50%;">
+                <a [routerLink]="['/home']"
+                    class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <img src="LogoCompleteWhite.png" alt="Gamer Heaven Logo" />
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a [routerLink]="['/home']" class="nav-link px-2 text-white">Home</a></li>
+                    <li><a [routerLink]="['/dashboard']" class="nav-link px-2 text-white"
+                            *ngIf="isAdminLogged()">Dashboard</a></li>
+                    <li><a [routerLink]="['/library']" class="nav-link px-2 text-white">My Library</a></li>
+                </ul>
+
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-end">
+                    <li>
+                        <div class="dropdown-container">
+                            <!-- Campo de busca -->
+                            <input type="text" class="form-control" placeholder="Search products..."
+                                [(ngModel)]="searchTerm" (input)="findProduct()" (focus)="dropdownOpen = true"
+                                (click)="$event.stopPropagation()" style="background-color: #6c757d ;" />
+
+                            <!-- Dropdown menu -->
+                            <div *ngIf="dropdownOpen" class="dropdown-menu show w-100"
+                                style="background-color: #6c757d ;">
+                                <div *ngFor="let product of products" class="dropdown-item d-flex align-items-center"
+                                    (click)="selectProduct(product)">
+                                    <img [src]="product.imagesUrl[0]" alt="Product Image" class="product-img me-2" />
+                                    <div class="flex-grow-1">
+                                        <strong>{{ product.name }}</strong>
+                                        <span *ngIf="product.unitPrice" class="d-block text-muted">${{ product.unitPrice
+                                            }}</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="products.length === 0" class="dropdown-item text-muted">
+                                    No products found.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Backdrop para fechar o dropdown ao clicar fora -->
+                        <div *ngIf="dropdownOpen" class="dropdown-backdrop" (click)="dropdownOpen = false"></div>
+                    </li>
+                    <li class="nav-item me-2">
+                        <div>
+                            <a [routerLink]="['/cart']" class="btn btn-outline-light position-relative">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                    class="bi bi-cart-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2">
+                                    </path>
+                                </svg>
+                                <span
+                                    class="badge bg-danger text-white position-absolute top-0 start-100 translate-middle">
+                                    {{ cartCount }}
+                                </span>
+                            </a>
+                        </div>
+
+                    </li>
+
+                    <li>
+                        <a class="btn text-white" *ngIf="isCustomerLogged() && !isAdminLogged()" data-bs-toggle="modal"
+                            data-bs-target="#customerInfo" (click)="getCustomer()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor"
+                                class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"></path>
+                                <path fill-rule="evenodd"
+                                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1">
+                                </path>
+                            </svg>
+                            {{ customer.name }}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="btn text-white" *ngIf="isCustomerLogged() && !isAdminLogged()" data-bs-toggle="modal"
+                            data-bs-target="#ordersInfo" (click)="getOders()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor"
+                                class="bi bi-archive" viewBox="0 0 16 16">
+                                <path
+                                    d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                            </svg>
+                            Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a type="button" class="btn btn-warning" [routerLink]="['/login']"
+                            *ngIf="!isCustomerLogged()">Login</a>
+                    </li>
+                    <li>
+                        <a type="button" class="btn btn-warning" (click)="logout()"
+                            *ngIf="isCustomerLogged()">Logout</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="modal fade" id="customerInfo" tabindex="-1" aria-labelledby="customerInfo" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form #customerForm="ngForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" [(ngModel)]="customer.name" name="name"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control bg-dark" id="email" [(ngModel)]="customer.email"
+                            name="email" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="phone" [(ngModel)]="customer.phone" name="phone"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="documentNumber" class="form-label">Document Number</label>
+                        <input type="text" class="form-control" id="documentNumber"
+                            [(ngModel)]="customer.documentNumber" name="documentNumber" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="creditScore" class="form-label">Credit Score</label>
+                        <input type="text" class="form-control bg-dark" id="creditScore"
+                            [(ngModel)]="customer.creditScore" name="creditScore" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="customerType" class="form-label">Customer Type</label>
+                        <select class="form-select" id="customerType" [(ngModel)]="customer.customerType"
+                            name="customerType" required>
+                            <option value="LEGAL_PERSON">Legal Person</option>
+                            <option value="NATURAL_PERSON">Natural Person</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="float: left;"
+                    (click)="deleteCustomer()">Delete Account</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal"
+                    (click)="editCustomer()">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ordersInfo" tabindex="-1" aria-labelledby="ordersInfo" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Orders Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div *ngIf="orders && orders.length > 0; else noOrders">
+                    <div *ngFor="let order of orders" class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title">Order #{{ order.id }}</h5>
+                                <button class="btn btn-sm btn-warning" (click)="startEdit(order)"
+                                    [disabled]="order.orderStatus !== 'PAID' && order.orderStatus !== 'WAITING_PAYMENT'">
+                                    Edit
+                                </button>
+                            </div>
+
+                            <p class="mb-1"><strong>Date: </strong> {{ order.moment | date:'short' }}</p>
+                            <p class="mb-1">
+                                <strong>Status: </strong>
+                                <span class="badge text-bg-secondary">{{ order.orderStatus }}</span>
+                            </p>
+                            <p class="mb-1"><strong>Total: </strong> {{ order.total | currency }}</p>
+                            <p class="mb-1" *ngIf="order.deliveryAddress">
+                                <strong>Address: </strong> {{ order.deliveryAddress.street }}, {{
+                                order.deliveryAddress.city }}
+                            </p>
+                            <p class="mb-0" *ngIf="order.coupon">
+                                <strong>Coupon: </strong> {{ order.coupon.code }}
+                            </p>
+
+                            <!-- Mostrar dropdown de endereço e botões quando estiver editando este pedido -->
+                            <div *ngIf="editingOrder?.id === order.id" class="mt-3">
+                                <label class="form-label">Change Address</label>
+                                <select [(ngModel)]="selectedAddressId" class="form-select mb-2">
+                                    <option *ngFor="let addr of customer.addresses" [value]="addr.id">
+                                        {{ addr.street }}, {{ addr.city }}
+                                    </option>
+                                </select>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-success" (click)="saveAddressChange()">Save</button>
+                                    <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <ng-template #noOrders>
+                    <div class="alert alert-info text-center">
+                        You have no active orders.
+                    </div>
+                </ng-template>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

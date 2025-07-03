@@ -1,0 +1,116 @@
+.form-control-dark {
+  border-color: var(--bs-gray);
+}
+.form-control-dark:focus {
+  border-color: #fff;
+  box-shadow: 0 0 0 .25rem rgba(255, 255, 255, .25);
+}
+
+.text-small {
+  font-size: 85%;
+}
+
+.dropdown-toggle:not(:focus) {
+  outline: 0;
+}
+
+img {
+  max-width:100px;
+  max-height:150px;
+  width: auto;
+  height: auto;
+}
+a{
+  margin: 0 5px;
+}
+.product-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.dropdown-item {
+  background-color: #6c757d ;
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Impede que o texto quebre a linha */
+  overflow: hidden;    /* Oculta o conteúdo que ultrapassar o limite */
+  text-overflow: ellipsis; /* Adiciona "..." ao final do texto que ultrapassar o limite */
+}
+
+.dropdown-item img {
+  background-color: #6c757d ;
+  margin-right: 8px;
+  width: 40px;
+  height: 40px;
+}
+
+.dropdown-item div {
+  background-color: #6c757d ;
+  flex-grow: 1;
+  overflow: hidden; /* Garante que o texto dentro da div também não ultrapasse */
+}
+
+/* O contêiner do dropdown deve ter posição relativa */
+.dropdown-container {
+  position: relative;
+  z-index: 2; /* Garante que o dropdown fique acima do backdrop */
+}
+
+/* O backdrop cobre toda a tela */
+.dropdown-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: transparent; /* Transparente, apenas para capturar o clique */
+}
+
+.modal-content {
+  animation: fadeInUp 0.4s ease-out;
+  background-color: #212529;
+  color: white;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Estilização adicional */
+.modal-header {
+  background-color: #212529;
+  color: white;
+  border-bottom: none;
+}
+
+.modal-footer {
+  background-color: #212529;
+  border-top: none;
+  color: white;
+}
+
+.card-body{
+  background: #343a40;
+  border: 1px solid #343a40;
+  color: white;
+}
+
+select{
+  background: #343a40;
+  color: white;
+}
+
+input{
+  background: #343a40;
+  color: white;
+}
+

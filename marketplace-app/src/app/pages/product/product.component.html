@@ -1,0 +1,96 @@
+<div>
+    <section *ngIf="product.isDeleted || !product.name || !product; else secondSection">
+        <div class="container text-center my-5">
+            <h1>404!</h1>
+            <h2>Product not Found!</h2>
+            <p>This product is not available.</p>
+        </div>
+    </section>
+
+    <ng-template #secondSection>
+        <section>
+            <div class="container px-4 px-lg-5 my-3">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" [src]="selectedImage" alt="...">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="small mb-1">ID: {{ product.id }}</div>
+                        <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
+                        <div class="fs-5 mb-5">
+                            <span>{{ product.unitPrice | currency}}</span>
+                            <br>
+                            <span *ngFor="let category of product.categories"
+                                class="badge bg-dark-subtle text-light-emphasis rounded-pill me-1">
+                                {{ category.name }}
+                            </span>
+                            
+                        </div>
+
+                        <small class="text-body-secondary" *ngIf="!product.isPhysical">Digital Copy</small>
+                        <small class="text-body-secondary" *ngIf="product.isPhysical">Physical Copy</small>
+                        <p class="lead">{{product.description}}</p>
+
+                        <div class="d-flex">
+                            <input class="form-control me-3" id="inputQuantity" type="number" min="1"
+                                style="max-width: 5rem" *ngIf="product.sellIndicator" [(ngModel)]="quantity"
+                                [disabled]="!product.isPhysical" (ngModelChange)="updateQuantity($event)">
+                            <button type="button" class="btn btn-sm btn-warning" *ngIf="product.sellIndicator"
+                                (click)="addToCart(product)">
+                                + Add to Cart
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger disabled" aria-disabled="true"
+                                *ngIf="!product.sellIndicator">
+                                Unavailable
+                            </button>
+                        </div>
+                    </div>
+                    <div class="thumbs">
+                        <a *ngFor="let image of product.imagesUrl" class="thumb-image active"
+                            (click)="changeImage(image)">
+                            <span><img [src]="image" alt="Game Image 1"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ng-template>
+</div>
+
+<div class="container px-4 px-lg-5 mt-5">
+    <h2 class="fw-bolder mb-4">Related Games</h2>
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+      <div class="col mb-5" *ngFor="let product of relatedProducts">
+        <div class="card h-100" style="cursor: pointer;" (click)="navigateToProduct(product.id)">
+          <!-- Product image -->
+          <img class="card-img-top" [src]="product.imagesUrl[0] || 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg'" alt="{{ product.name }}">
+          <!-- Product details -->
+          <div class="card-body p-4">
+            <div class="text-center">
+              <!-- Product name -->
+              <h5 class="fw-bolder">{{ product.name }}</h5>
+              <div class="mb-2">
+                <span *ngFor="let category of product.categories"
+                  class="badge bg-light-subtle text-light-emphasis rounded-pill me-1">
+                  {{ category.name }}
+                </span>
+              </div>
+              <!-- Product price: se houver promoção, mostra preço antigo e novo -->
+              <div *ngIf="product.unitPrice">
+                <span>
+                  ${{ product.unitPrice }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- Product actions -->
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center">
+              <a class="btn btn-outline-warning mt-auto" (click)="navigateToProduct(product.id); $event.stopPropagation()">
+                View options
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

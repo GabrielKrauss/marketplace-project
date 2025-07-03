@@ -1,0 +1,283 @@
+<section class="h-100 h-custom">
+  <div class="container py-4 h-100">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-custom overflow-hidden text-center bg-body-tertiary border rounded-3">
+        <li class="breadcrumb-item active" id="yourCart">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" id="yourCart" routerLink="/cart">
+            Your Cart
+          </a>
+        </li>
+        <li class="breadcrumb-item bg-warning ">
+          <a class="link-body-emphasis fw-semibold text-decoration-none text-black"
+            routerLink="/deliveryAddress">Delivery
+            Address</a>
+        </li>
+        <li class="breadcrumb-item active">
+          <a class="link-body-emphasis fw-semibold text-decoration-none" [class.disabled]="deliveryAddressId === 0 "
+            id="yourCart" routerLink="/payment">
+            Payment
+          </a>
+        </li>
+      </ol>
+    </nav>
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-8">
+                <div class="p-4">
+
+                  <h3>Choose Your Delivery Address</h3>
+
+                  <div class="row mb-4" *ngIf="hasAddresses; else emptyAddresses">
+                    <hr class="my-4">
+                    <div class="d-flex flex-column gap-4 py-3">
+
+                      <div class="list-group list-group-checkable"
+                        *ngFor="let address of customer.addresses; let i = index">
+                        <label [class.disabled]="!address.isActive"
+                          class="list-group-item d-flex align-items-center justify-content-between w-100 rounded-3 py-3"
+                          [for]="'listGroupCheckableRadios' + address.id">
+
+                          <div class="address-text">
+                            {{ address.street }}
+                            <span class="d-block small opacity-50">
+                              {{ address.neighborhood }}, {{ address.country }}
+                            </span>
+                          </div>
+
+                          <a class="text-body-secondary me-3" data-bs-toggle="modal" data-bs-target="#editAddress"
+                            (click)="edit(address)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                              class="bi bi-pencil-square" viewBox="0 0 16 16">
+                              <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z">
+                              </path>
+                              <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z">
+                              </path>
+                            </svg>
+                          </a>
+                          <a (click)="deleteAddress(address.id)" class="btn text-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                              class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                              <path
+                                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5">
+                              </path>
+                            </svg>
+                          </a>
+
+                          <input class="list-group-item-check pe-none " type="radio" name="listGroupCheckableRadios"
+                            [id]="'listGroupCheckableRadios' + address.id" [value]="address.id"
+                            [(ngModel)]="deliveryAddressId" (change)="setDeliveryAddress(address.id)">
+                        </label>
+                      </div>
+
+                    </div>
+                    <hr class="my-4">
+
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                      <p>Add new Address to your account.</p>
+                      <a data-bs-toggle="modal" data-bs-target="#addAddress" class="btn btn-outline-success">+ Add</a>
+                    </div>
+
+                    <hr class="my-4">
+                  </div>
+
+
+                  <div>
+                    <h6 class="mb-0"><a routerLink="/home" class="text-body"><i
+                          class="fas fa-long-arrow-alt-left me-2"></i>Back
+                        to shop</a></h6>
+                  </div>
+                  <ng-template #emptyAddresses>
+                    <div class="text-center my-5" aria-hidden="true">
+                      <h2>You have no Addresses</h2>
+                      <p>Add and Address to your account.</p>
+                      <a data-bs-toggle="modal" data-bs-target="#addAddress" class="btn btn-warning">+ Add</a>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="col-lg-4 bg-body-tertiary">
+                <div class="p-5">
+                  <h3 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-warning">Your cart</span>
+                    <span class="badge bg-warning text-black rounded-pill">{{ cartProducts.length }}</span>
+                  </h3>
+                  <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-sm"
+                      *ngFor="let orderItem of cartProducts">
+                      <div>
+                        <h6 class="my-0">{{ getProductById(orderItem.productId)?.name || 'Unknown Product' }}</h6>
+                        <small class="text-body-secondary"
+                          *ngIf="getProductById(orderItem.productId)?.isPhysical === false">Digital</small>
+                        <small class="text-body-secondary"
+                          *ngIf="getProductById(orderItem.productId)?.isPhysical === true">Physical</small>
+                      </div>
+                      <span class="text-body-secondary">
+                        {{ (getProductById(orderItem.productId)?.unitPrice || 0) * orderItem.quantity | currency }}
+                      </span>
+                    </li>
+
+                    <li class="list-group-item d-flex justify-content-between bg-body-tertiary" *ngIf="appliedCoupon">
+                      <div class="text-success">
+                        <h6 class="my-0">Promo Code</h6>
+                        <small>{{ appliedCoupon.code }}</small>
+                      </div>
+                      <span class="text-success" *ngIf="appliedCoupon.discountPercentage">
+                        -{{ appliedCoupon.discountPercentage }}%
+                      </span>
+                      <span class="text-success">-{{ discountValue | currency }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                      <span>Total (USD)</span>
+                      <strong>{{ totalPrice | currency }}</strong>
+                    </li>
+                  </ul>
+                  <form class="card p-2">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Zip code">
+                      <button type="submit" class="btn btn-secondary">Check shipping</button>
+                    </div>
+                  </form>
+                  <br>
+                  <div class="popover-container w-100">
+                    <!-- Botão com a condição de desabilitado -->
+                    <!-- Botão -->
+                    <button class="w-100 btn btn-warning btn-lg" type="button" routerLink="/payment"
+                      [disabled]="deliveryAddressId === 0 || cartProducts.length === 0 || !areAllItemsValid()">
+                      Continue to checkout
+                    </button>
+
+                    <!-- Popovers -->
+                    <ng-container *ngIf="deliveryAddressId === 0; else checkCart">
+                      <div class="popover-content">
+                        Choose your Delivery Address first!
+                      </div>
+                    </ng-container>
+
+                    <ng-template #checkCart>
+                      <ng-container *ngIf="cartProducts.length === 0; else checkItems">
+                        <div class="popover-content">
+                          Your Cart is empty! Choose some of our products and come back!
+                        </div>
+                      </ng-container>
+                    </ng-template>
+
+                    <ng-template #checkItems>
+                      <ng-container *ngIf="!areAllItemsValid()">
+                        <div class="popover-content">
+                          Check your Cart! You have a product that is no longer available!
+                        </div>
+                      </ng-container>
+                    </ng-template>
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="modal fade" id="addAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="addAddressLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addAddressLabel">Add New Address</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="add-product-form">
+          <div class="form-group">
+            <label for="street">Street</label>
+            <input id="street" type="text" class="form-control" placeholder="Street" [(ngModel)]="newAddress.street" />
+          </div>
+        
+          <div class="form-group">
+            <label for="neighborhood">Neighborhood</label>
+            <input id="neighborhood" type="text" class="form-control" placeholder="Neighborhood" [(ngModel)]="newAddress.neighborhood" />
+          </div>
+        
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="houseNumber">Number</label>
+              <input id="houseNumber" type="number" class="form-control" placeholder="Number" [(ngModel)]="newAddress.houseNumber" />
+            </div>
+        
+            <div class="form-group">
+              <label for="city">City</label>
+              <input id="city" type="text" class="form-control" placeholder="City" [(ngModel)]="newAddress.city" />
+            </div>
+          </div>
+        
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="country">Country</label>
+              <input id="country" type="text" class="form-control" placeholder="Country" [(ngModel)]="newAddress.country" />
+            </div>
+        
+            <div class="form-group">
+              <label for="zipCode">Zip Code</label>
+              <input id="zipCode" type="number" class="form-control" placeholder="Zip Code" [(ngModel)]="newAddress.zipCode" />
+            </div>
+          </div>
+        
+          <div class="form-group">
+            <label for="addressType">Select Address Type:</label>
+            <select id="addressType" class="form-control" [(ngModel)]="newAddress.addressType">
+              <option *ngFor="let type of addressTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="insertAddress()" data-bs-dismiss="modal">Add
+          Address</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editAddress" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="editAddressLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editAddressLabel">Edit Address</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="add-product">
+          <input type="text" placeholder="Street" [(ngModel)]="editAddress.street" />
+          <input type="text" placeholder="Neighborhood" [(ngModel)]="editAddress.neighborhood" />
+          <input type="number" placeholder="Number" [(ngModel)]="editAddress.houseNumber" />
+          <input type="text" placeholder="Country" [(ngModel)]="editAddress.country" />
+          <input type="number" placeholder="Zip Code" [(ngModel)]="editAddress.zipCode" />
+          <div>
+            <label class="mt-2">Select Address Type:</label>
+            <select class="form-control" [(ngModel)]="editAddress.addressType">
+              <option *ngFor="let type of addressTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="updateAddress()" data-bs-dismiss="modal">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
