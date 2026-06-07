@@ -1,7 +1,7 @@
 <h2 class="fw-normal text-center align-items-center" id="product-album">Checkout our games!!</h2>
 <br>
 <br>
-<div   class="container" style="float: right; width: 80%;">
+<div class="container" style="float: right; width: 80%;">
   <div data-bs-theme="dark">
     <form class="p-2 bg-dark border-bottom border-dark">
       <input type="text" class="form-control" placeholder="Search for product..." [(ngModel)]="searchTerm"
@@ -9,15 +9,16 @@
     </form>
 
   </div>
-  <div  class="album py-3 bg-body-tertiary">
+  <div class="album py-3 bg-body-tertiary">
 
 
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
       <!-- Exibe produtos filtrados -->
       <div *ngFor="let product of products" class="col" [ngClass]="{ 'd-none': product.isDeleted }">
         <div class="card shadow-sm h-100">
-          <img [src]="product.imagesUrl" class="card-img-top" alt="{{ product.name }}"
-            [routerLink]="['/product', product.id]" />
+          <div class="card-img-wrap" [routerLink]="['/product', product.id]" style="cursor: pointer;">
+            <img [src]="product.imagesUrl" class="card-img-top" alt="{{ product.name }}" />
+          </div>
           <div class="card-body d-flex flex-column">
             <h5 class="card-title" [routerLink]="['/product', product.id]">{{ product.name }}</h5>
             <small class="text-body-secondary" *ngIf="!product.isPhysical">Digital Copy</small>
@@ -59,25 +60,26 @@
       </div>
     </div>
     <br>
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-end">
-          <li class="page-item " [class.disabled]="page === 0">
-            <button class="page-link text-warning"(click)="goToPage(page - 1)">Previous</button>
-          </li>
-      
-          <!-- Gerar as páginas dinamicamente -->
-          <li *ngFor="let pageNumber of [].constructor(totalPages); let i = index" class="page-item" [class.active]="page === i">
-            <button class="page-link text-warning" (click)="goToPage(i)">{{ i + 1 }}</button>
-          </li>
-      
-          <li class="page-item" [class.disabled]="page === totalPages - 1">
-            <button class="page-link text-warning" (click)="goToPage(page + 1)">Next</button>
-          </li>
-        </ul>
-      </nav>
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-end">
+        <li class="page-item " [class.disabled]="page === 0">
+          <button class="page-link text-warning" (click)="goToPage(page - 1)">Previous</button>
+        </li>
+
+        <!-- Gerar as páginas dinamicamente -->
+        <li *ngFor="let pageNumber of [].constructor(totalPages); let i = index" class="page-item"
+          [class.active]="page === i">
+          <button class="page-link text-warning" (click)="goToPage(i)">{{ i + 1 }}</button>
+        </li>
+
+        <li class="page-item" [class.disabled]="page === totalPages - 1">
+          <button class="page-link text-warning" (click)="goToPage(page + 1)">Next</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 
-  
+
 </div>
 
 
@@ -90,7 +92,7 @@
 
     <label class="list-group-item d-flex gap-2" *ngFor="let category of filteredCategoryList">
       <input class="custom-checkbox" type="checkbox" value="" [checked]="isSelected(category)"
-         (input)="toggleCategory(category)">
+        (input)="toggleCategory(category)">
       <span>
         {{ category.name }}
       </span>
@@ -100,4 +102,3 @@
     </div>
   </div>
 </div>
-

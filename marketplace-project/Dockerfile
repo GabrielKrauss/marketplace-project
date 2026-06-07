@@ -1,7 +1,17 @@
-FROM openjdk:17-jdk-slim
+# ===== BUILD =====
+FROM maven:3.9.9-eclipse-temurin-17 AS build
+WORKDIR /app
 
-EXPOSE 8080
+COPY pom.xml .
+RUN mvn dependency:go-offline
 
-ADD target/marketplace-0.0.1-SNAPSHOT.jar marketplace-0.0.1-SNAPSHOT.jar
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-CMD ["java", "-jar", "marketplace-0.0.1-SNAPSHOT.jar"]
+# ===== RUNTIME =====
+FROM eclipse-temurin:17-jdk-jammy
+WORKDIR /app
+
+COPY --from=build /app/target/*jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

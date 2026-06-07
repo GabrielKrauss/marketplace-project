@@ -89,7 +89,7 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  getOders(): void {
+  getOrders(): void {
     this.getCustomer();
     const customerId = localStorage.getItem('customerId');
     if (customerId) {
@@ -131,7 +131,7 @@ export class HeaderComponent implements OnInit {
       .operatorUpdate(this.editingOrder.id, this.editingOrder)
       .subscribe({
         next: () => {
-          this.getOders();
+          this.getOrders();
           this.cancelEdit();
         },
         error: (err) => {

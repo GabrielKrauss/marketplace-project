@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>UML Marketplace</title>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+<style>
+body {
+    margin: 0;
+    background: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+/* Container */
+.wrapper {
+    padding: 30px;
+}
+
+/* Mermaid */
+.mermaid {
+    display: flex;
+    justify-content: center;
+}
+
+/* 🔥 FIX DEFINITIVO LABELS */
+.mermaid .edgeLabel text {
+    fill: #111 !important;
+}
+
+.mermaid .edgeLabel span,
+.mermaid .edgeLabel div,
+.mermaid .edgeLabel p {
+    color: #111 !important;
+    background: transparent !important;
+}
+
+/* remove fundo das labels */
+.mermaid .edgeLabel rect,
+.mermaid .labelBkg {
+    fill: transparent !important;
+    stroke: none !important;
+}
+
+/* deixa tudo mais nítido */
+.mermaid svg {
+    min-width: 1000px;
+    font-size: 14px;
+}
+
+/* botão */
+button {
+    margin-top: 20px;
+    padding: 10px 18px;
+    border: none;
+    background: #4f8ef7;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="mermaid">
+classDiagram
+    direction TB
+
+    class OrderStatus {
+        enum
+        WAITING_PAYMENT
+        PAID
+        SHIPPED
+        DELIVERED
+        CANCELED
+    }
+
+    class CustomerType {
+        enum
+        LEGAL_PERSON
+        NATURAL_PERSON
+    }
+
+    class AddressType {
+        enum
+        HOME_ADDRESS
+        BUSINESS_ADDRESS
+        SHIPPING_ADDRESS
+    }
+    
+    class Customer {
+        +Long id
+        +String name
+        +String keycloakId
+        +String phone
+        +String email
+        +String documentNumber
+        +String creditScore
+        +Boolean isDeleted
+        +CustomerType customerType
+    }
+
+    class Product {
+        +Long id
+        +String name
+        +String description
+        +Double unitPrice
+        +Integer stock
+        +Boolean sellIndicator
+        +Boolean isPhysical
+        +Boolean isDeleted
+        +List~String~ imagesUrl
+        +String fileUrl
+    }
+
+    class Order {
+        +Long id
+        +Instant moment
+        +Integer orderStatus
+        +Boolean isDeleted
+        +Double total
+    }
+
+    class Address {
+        +Long id
+        +String street
+        +int houseNumber
+        +String neighborhood
+        +int zipCode
+        +String country
+        +String city
+        +Boolean isActive
+        +AddressType addressType
+    }
+
+    class Category {
+        +Long id
+        +String name
+    }
+
+    class Coupon {
+        +Long id
+        +String code
+        +Double discountValue
+        +Double discountPercentage
+        +Boolean isActive
+    }
+
+    class OrderItem {
+        +Long id
+        +Integer quantity
+        +Long productId
+    }
+
+    Customer "1" --> "*" Order
+    Customer "1" --> "*" Address
+    Customer "*" --> "*" Product : library
+    Order "1" --> "0..1" Address
+    Order "1" --> "0..1" Coupon
+    Order "1" --> "*" OrderItem
+    OrderItem "*" --> "1" Product
+    Product "*" --> "1" Category
+</div>
+
+<button onclick="downloadPNG()">Baixar PNG</button>
+
+</div>
+
+<script>
+mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    securityLevel: 'loose',
+    themeVariables: {
+        primaryColor: '#f8fafc',
+        primaryBorderColor: '#4f8ef7',
+        primaryTextColor: '#111',
+        lineColor: '#333',
+
+        edgeLabelBackground: 'transparent',
+        edgeLabelColor: '#111',
+        tertiaryTextColor: '#111'
+    }
+});
+
+/* EXPORT PNG PERFEITO */
+async function downloadPNG() {
+    const svg = document.querySelector(".mermaid svg");
+
+    const clone = svg.cloneNode(true);
+
+    const bbox = svg.getBBox();
+    const scale = 3;
+
+    clone.setAttribute("width", bbox.width * scale);
+    clone.setAttribute("height", bbox.height * scale);
+    clone.setAttribute("viewBox", `0 0 ${bbox.width} ${bbox.height}`);
+
+    const svgData = new XMLSerializer().serializeToString(clone);
+    const img = new Image();
+
+    img.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = bbox.width * scale;
+        canvas.height = bbox.height * scale;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const link = document.createElement("a");
+        link.download = "uml-marketplace.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    };
+
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+}
+</script>
+
+</body>
+</html>

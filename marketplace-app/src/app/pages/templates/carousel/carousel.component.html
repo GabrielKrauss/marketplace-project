@@ -1,25 +1,21 @@
 <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
   <!-- Indicadores do Carrossel -->
   <div class="carousel-indicators">
-    <button *ngFor="let product of productsCarousel; let i = index" 
-      type="button" data-bs-target="#myCarousel" 
-      [attr.data-bs-slide-to]="i" 
-      [class.active]="i === 0"
-      [attr.aria-current]="i === 0 ? 'true' : null" 
+    <button *ngFor="let product of productsCarousel; let i = index" type="button" data-bs-target="#myCarousel"
+      [attr.data-bs-slide-to]="i" [class.active]="i === 0" [attr.aria-current]="i === 0 ? 'true' : null"
       [attr.aria-label]="'Slide ' + (i + 1)">
     </button>
   </div>
 
   <!-- Slides do Carrossel -->
   <div class="carousel-inner">
-    <div *ngFor="let product of productsCarousel; let i = index" 
-      class="carousel-item" 
-      [class.active]="i === 0">
-      
+    <div *ngFor="let product of productsCarousel; let i = index" class="carousel-item" [class.active]="i === 0">
+
       <img [src]="product.imagesUrl" class="d-block" alt="Product Image">
-      
+
       <div class="container ">
-        <div class="carousel-caption caption-container" [ngClass]="{'text-start': i === 0, 'text-end': i === productsCarousel.length - 1}">
+        <div class="carousel-caption caption-container"
+          [ngClass]="{'text-start': i === 0, 'text-end': i === productsCarousel.length - 1}">
           <h1>{{ product.name }}</h1>
           <p>{{ product.description }}</p>
           <p><a class="btn btn-lg btn-warning" [routerLink]="['/product', product.id]">View details</a></p>
@@ -41,12 +37,16 @@
 
 
 <div class="container marketing">
-  <div class="row">
+  <div class="row g-4">
     <div class="col-lg-4" *ngFor="let product of products">
-      <img class="bd-placeholder-img" width="300" height="140" [src]="product.imagesUrl" alt="Product Image">
-      <h2 class="fw-normal">{{ product.name }}</h2>
-      <p>{{ product.description }}</p>
-      <p><a class="btn btn-secondary" [routerLink]="['/product', product.id]">View details &raquo;</a></p>
+      <div class="marketing-card" [routerLink]="['/product', product.id]">
+        <div class="marketing-img-wrap">
+          <img [src]="product.imagesUrl" alt="{{ product.name }}">
+        </div>
+        <h2 class="fw-normal">{{ product.name }}</h2>
+        <p>{{ product.description }}</p>
+        <a class="btn btn-secondary" [routerLink]="['/product', product.id]">View details &raquo;</a>
+      </div>
     </div>
   </div>
 </div>

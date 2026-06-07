@@ -52,7 +52,7 @@ export class KeycloakService {
           console.log('Token:', token);
           const decoded: any = jwtDecode(token);
           const keycloakId = decoded.sub;
-          const roles = decoded.realm_access?.roles || [];
+          const roles = decoded.resource_access?.['GamerHeaven-app']?.roles || [];
           const name = decoded.completeName;
           const phone = decoded.phoneNumber;
           const documentNumber = decoded.documentNumber;

@@ -73,15 +73,15 @@ public class TestConfig implements CommandLineRunner {
 				Arrays.asList(cat1, cat2, cat3, cat4, cat5, cat6, cat7, cat8, cat9, cat10, cat11, cat12, cat13));
 
 		List<String> otherImages = Arrays.asList(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/ss_92c7e8f34c00bdb455070ecdd5b746f0d2f6d808.600x338.jpg?t=1695270428",
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/ss_5478c9192023a3b3e438c030caa0809b62523587.600x338.jpg?t=1695270428",
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/ss_d5b6edd94e77ba6db31c44d8a3c09d807ab27751.600x338.jpg?t=1695270428");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/ss_92c7e8f34c00bdb455070ecdd5b746f0d2f6d808.1920x1080.jpg?t=1695270428",
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/ss_5478c9192023a3b3e438c030caa0809b62523587.1920x1080.jpg?t=1695270428",
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/ss_d5b6edd94e77ba6db31c44d8a3c09d807ab27751.1920x1080.jpg?t=1695270428");
 
 		List<String> images1 = Arrays.asList(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/261570/header.jpg?t=1667504148",
-				"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/387290/ss_56f57022e1e0e8666a9fd141fe0933c1e8b36137.600x338.jpg?t=1701967651",
-				"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/387290/ss_d355fa04e0469134629eadcdef627cae490b8f8c.600x338.jpg?t=1701967651",
-				"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/387290/ss_84985a89232bf29eb6e70f2e096ff346c07abfc0.600x338.jpg?t=1701967651");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/261570/library_hero.jpg?t=1667504148",
+				"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/387290/ss_56f57022e1e0e8666a9fd141fe0933c1e8b36137.1920x1080.jpg?t=1701967651",
+				"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/387290/ss_d355fa04e0469134629eadcdef627cae490b8f8c.1920x1080.jpg?t=1701967651",
+				"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/387290/ss_84985a89232bf29eb6e70f2e096ff346c07abfc0.1920x1080.jpg?t=1701967651");
 		Product p1 = new Product(null, "Ori and the Blind Forest",
 				"Explore a deeply emotional story about love, sacrifice, and the hope that exists in all of us.", 99.00,
 				10, true, true, images1, "https://pastebin.com/raw/tEdFr645");
@@ -91,7 +91,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images2 = new ArrayList<>();
 		images2.add(0,
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/header.jpg?t=1695270428");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/367520/library_hero.jpg?t=1695270428");
 		images2.addAll(otherImages);
 		Product p2 = new Product(null, "Hollow Knight",
 				"Explore a vast interconnected world of forgotten paths, lush forests, and ruined cities.", 46.99, 10,
@@ -101,10 +101,10 @@ public class TestConfig implements CommandLineRunner {
 		productRepository.saveAll(Arrays.asList(p2));
 
 		List<String> images3 = Arrays.asList(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/header.jpg?t=1709068852",
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/ss_615455299355eaf552c638c7ea5b24a8b46e02dd.600x338.jpg?t=1709068852",
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/ss_874f2d27a9120ee60cbce0c7bd4085525fd09b26.600x338.jpg?t=1709068852",
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/ss_ae3db08c403209d868e52ae513540e1ba0489302.600x338.jpg?t=1709068852");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/library_hero.jpg?t=1709068852",
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/ss_615455299355eaf552c638c7ea5b24a8b46e02dd.1920x1080.jpg?t=1709068852",
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/ss_874f2d27a9120ee60cbce0c7bd4085525fd09b26.1920x1080.jpg?t=1709068852",
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/ss_ae3db08c403209d868e52ae513540e1ba0489302.1920x1080.jpg?t=1709068852");
 		Product p3 = new Product(null, "Cuphead",
 				"A classic run and gun action game heavily focused on boss battles. Inspired by cartoons of the 1930s.",
 				100.00, 10, true, false, images3, "https://pastebin.com/raw/tEdFr645");
@@ -114,7 +114,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images4 = new ArrayList<>();
 		images4.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/header.jpg?t=1715722799");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1145360/library_hero.jpg?t=1715722799");
 		images4.addAll(otherImages);
 		Product p4 = new Product(null, "Hades",
 				"Play as the immortal Prince of the Underworld using powers and mythical weapons from Olympus to escape the grasp of the god of the dead.",
@@ -125,7 +125,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images5 = new ArrayList<>();
 		images5.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2050650/header.jpg?t=1736385712");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2050650/library_hero.jpg?t=1736385712");
 		images5.addAll(otherImages);
 		Product p5 = new Product(null, "Resident Evil 4",
 				"Special agent Leon S. Kennedy is sent on a mission to rescue the U.S. President’s daughter who has been kidnapped.",
@@ -136,7 +136,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images6 = new ArrayList<>();
 		images6.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/header.jpg?t=1736424367");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/292030/library_hero.jpg?t=1736424367");
 		images6.addAll(otherImages);
 		Product p6 = new Product(null, "The Witcher 3: Wild Hunt",
 				"Play as Geralt of Rivia, a monster hunter, as you explore a vast open world and search for your adopted daughter.",
@@ -147,7 +147,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images7 = new ArrayList<>();
 		images7.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/header.jpg?t=1720558643");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1174180/library_hero.jpg?t=1720558643");
 		images7.addAll(otherImages);
 		Product p7 = new Product(null, "Red Dead Redemption 2",
 				"Experience life as Arthur Morgan, an outlaw in the Old West, while dealing with issues of loyalty and survival.",
@@ -158,7 +158,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images8 = new ArrayList<>();
 		images8.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1426210/header.jpg?t=1730911936");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1426210/library_hero.jpg?t=1730911936");
 		images8.addAll(otherImages);
 		Product p8 = new Product(null, "It Takes Two",
 				"Embark on the craziest journey of your life in It Takes Two, a genre-bending platform adventure created purely for co-op.",
@@ -170,7 +170,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images9 = new ArrayList<>();
 		images9.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1672970/header.jpg?t=1717003107");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1672970/library_hero.jpg?t=1717003107");
 		images9.addAll(otherImages);
 		Product p9 = new Product(null, "Minecraft Dungeons",
 				"Build and explore infinite worlds with blocks in the most popular sandbox game of all time.", 99.99,
@@ -181,7 +181,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images10 = new ArrayList<>();
 		images10.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/header.jpg?t=1734434803");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1091500/library_hero.jpg?t=1734434803");
 		images10.addAll(otherImages);
 		Product p10 = new Product(null, "Cyberpunk 2077",
 				"Play as V, a mercenary in Night City, searching for the unique implant that guarantees immortality.",
@@ -192,7 +192,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images11 = new ArrayList<>();
 		images11.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1593500/header.jpg?t=1729030762");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1593500/library_hero.jpg?t=1729030762");
 		images11.addAll(otherImages);
 		Product p11 = new Product(null, "God of War",
 				"Epic adventure of Kratos and his son Atreus, facing gods and creatures from Norse mythology on a journey for redemption.",
@@ -203,7 +203,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images12 = new ArrayList<>();
 		images12.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/632360/header.jpg?t=1741113466");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/632360/library_hero.jpg?t=1741113466");
 		images12.addAll(otherImages);
 		Product p12 = new Product(null, "Risk of Rain 2",
 				"Escape a chaotic alien planet by fighting through hordes of frenzied monsters – with your friends, or on your own.",
@@ -214,7 +214,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images13 = new ArrayList<>();
 		images13.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/header.jpg?t=1741618762");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2379780/library_hero.jpg?t=1741618762");
 		images13.addAll(otherImages);
 		Product p13 = new Product(null, "Balatro",
 				"A hypnotically satisfying deckbuilder where you play illegal poker hands, discover game-changing jokers, and trigger adrenaline-pumping, outrageous combos",
@@ -226,7 +226,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images14 = new ArrayList<>();
 		images14.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1946700/header.jpg?t=1732889537");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1946700/library_hero.jpg?t=1732889537");
 		images14.addAll(otherImages);
 		Product p14 = new Product(null, "Layers of Fear",
 				"This narrative-focused psychological horror experience is ready for its final brushstrokes, its curtain call, its final chapter.",
@@ -237,7 +237,7 @@ public class TestConfig implements CommandLineRunner {
 
 		List<String> images15 = new ArrayList<>();
 		images15.add(
-				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/637650/header.jpg?t=1737963877");
+				"https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/637650/library_hero.jpg?t=1737963877");
 		images15.addAll(otherImages);
 		Product p15 = new Product(null, "Final Fantasy XV",
 				"Explore the world of Eos as Noctis, prince of a devastated empire, traveling with friends to defeat evil forces.",
